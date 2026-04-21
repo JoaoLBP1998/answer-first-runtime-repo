@@ -1,0 +1,99 @@
+{
+  "exact_visible_text": "Solve for x: 3(x + 1) = 15",
+  "session_mode": "NEW_PROBLEM",
+  "text_input_classification": "REAL_QUESTION",
+  "certainty_score": 100,
+  "search_required": true,
+  "match_status": "SEARCH_BOUND",
+  "question_match_notes": "Text-only one-variable linear equation. Live instructional sources were opened to support the standard distribute-then-isolate method.",
+  "visible_subparts": [
+    "WHOLE_EXERCISE"
+  ],
+  "active_subpart_status": {
+    "status": "BOUND",
+    "safely_bound_subpart": "WHOLE_EXERCISE"
+  },
+  "ambiguity_reason": "NONE",
+  "artifact_quality": {
+    "status": "clear",
+    "notes": "Text-only academic question with no OCR ambiguity."
+  },
+  "latest_student_line": "Solve for x: 3(x + 1) = 15",
+  "latest_tutor_line": "NONE",
+  "classroom_transcript_context": {
+    "raw_transcript_text": "NONE",
+    "latest_student_name": "NONE",
+    "latest_student_line": "Solve for x: 3(x + 1) = 15",
+    "latest_tutor_name": "NONE",
+    "latest_tutor_line": "NONE"
+  },
+  "answer_scope": {
+    "solved_subparts": [
+      "WHOLE_EXERCISE"
+    ],
+    "unsolved_subparts": [],
+    "scope_notes": "Single linear equation solved as one unit."
+  },
+  "answer_claims": [
+    {
+      "id": "A1",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "Distribute first: 3(x + 1) = 15 becomes 3x + 3 = 15. Subtract 3 to get 3x = 12, then divide by 3 to get x = 4.",
+      "target_fields": [
+        "answer_claims[id=A1].text",
+        "solved_answers[subpart=WHOLE_EXERCISE].final_answer",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]"
+      ]
+    }
+  ],
+  "solved_answers": [
+    {
+      "subpart": "WHOLE_EXERCISE",
+      "final_answer": "x = 4",
+      "equivalent_expression": "x = 4",
+      "reasoning_steps": [
+        "Apply the distributive property: 3(x + 1) becomes 3x + 3.",
+        "Rewrite the equation as 3x + 3 = 15.",
+        "Subtract 3 from both sides to get 3x = 12.",
+        "Divide both sides by 3 to get x = 4."
+      ]
+    }
+  ],
+  "controller_supporting_sources": [
+    {
+      "id": "C1",
+      "title": "2.2 Linear Equations in One Variable | OpenStax College Algebra 2e",
+      "url": "https://openstax.org/books/college-algebra-2e/pages/2-2-linear-equations-in-one-variable",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "copied_text": "Apply the distributive property as needed and isolate the variable on one side of the equation.",
+      "locator": "How To: Given a linear equation in one variable, use algebra to solve it",
+      "why_this_source_matters": "Supports distributing first and then isolating x."
+    },
+    {
+      "id": "C2",
+      "title": "2.1 Linear Equations | Mathematics LibreTexts",
+      "url": "https://math.libretexts.org/Courses/SUNY_Geneseo/Math_113%3A_Finite_Math_for_Society/02%3A_Linear_Equations/2.01%3A_Linear_Equations",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "copied_text": "Notice the first step is distributing, then it is solved like any other two-step equation.",
+      "locator": "Example PageIndex 21 and general strategy for solving linear equations",
+      "why_this_source_matters": "Matches the distribute, simplify, and isolate sequence used for this equation."
+    }
+  ],
+  "visible_tutor_cycle": {
+    "message_to_tutor_now": "Distribute the 3 first. What does 3(x + 1) become?",
+    "next_expected_student_reply": "3x + 3",
+    "if_on_track": "Right. Now the equation is 3x + 3 = 15. What should you do next to isolate 3x?",
+    "if_confused": "Use the distributive property: multiply 3 by x and by 1, so 3(x + 1) becomes 3x + 3.",
+    "silence_breaker": "What is the result of distributing 3 over x + 1?",
+    "current_step": "Distribute first, then isolate x.",
+    "supporting_claim_ids": [
+      "A1"
+    ]
+  },
+  "blocking_gaps": []
+}

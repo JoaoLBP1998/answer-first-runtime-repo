@@ -1,0 +1,40 @@
+{
+  "status": "READY",
+  "approved_claim_ids": [
+    "A1"
+  ],
+  "approved_answer_fields": [
+    "answer_claims[id=A1].text",
+    "solved_answers[subpart=WHOLE_EXERCISE].final_answer",
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]",
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]",
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]"
+  ],
+  "verified_source_ids": [
+    "S1",
+    "S2"
+  ],
+  "proof_dossier_copy": [
+    {
+      "claim_id": "A1",
+      "target_fields": [
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]"
+      ],
+      "url": "https://courses.lumenlearning.com/slcc-elementaryalgebra/chapter/1-1-solving-one-step-linear-equations/",
+      "copied_text": "Divide both sides of the equation by 3 to isolate the variable.",
+      "why_this_excerpt_matters": "Supports the move from 3c = b to c = b / 3."
+    },
+    {
+      "claim_id": "A1",
+      "target_fields": [
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+        "solved_answers[subpart=WHOLE_EXERCISE].final_answer"
+      ],
+      "url": "https://openstax.org/books/prealgebra/pages/4-7-solve-equations-with-fractions",
+      "copied_text": "When you add or divide the same quantity from both sides of an equation, you still have equality.",
+      "why_this_excerpt_matters": "Supports the equality-preserving operations that produce b / 3 + 3."
+    }
+  ],
+  "risk_flags": []
+}

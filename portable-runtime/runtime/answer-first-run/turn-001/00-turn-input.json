@@ -1,0 +1,14 @@
+{
+  "turn_id": "turn-001",
+  "captured_at": "2026-04-21T02:45:00.8025168-03:00",
+  "input_mode": "NEW_SCREENSHOT",
+  "raw_operator_text": "NONE",
+  "raw_student_text": "NONE",
+  "raw_classroom_transcript_text": "NONE",
+  "thread_attachment": {
+    "type": "image",
+    "source": "conversation_attachment",
+    "artifact_quality": "clear",
+    "exact_visible_text": "For all real numbers b and c such that the product of c and 3 is b, which of the following expressions represents the sum of c and 3 in terms of b?\n\nA. b + 3\nB. 3b + 3\nC. 3(b + 3)\nD. (b + 3) / 3\nE. b / 3 + 3"
+  }
+}

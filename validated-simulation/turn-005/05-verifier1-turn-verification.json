@@ -1,0 +1,190 @@
+{
+  "mode": "TURN_CONSISTENCY_CHECK",
+  "proof_status": "DONE",
+  "status": "PASS",
+  "coverage_status": "COVERED_BY_DOSSIER",
+  "claims": [
+    {
+      "id": "T1",
+      "subpart": "NONE",
+      "text": "The live reply correctly prompts the student to distribute 3 to both terms and correct 3(x + 1) to 3x + 3.",
+      "target_fields": [
+        "message_to_tutor_now",
+        "if_confused",
+        "silence_breaker",
+        "current_step"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "S1",
+        "S2"
+      ],
+      "why_supported": "The live reply stays inside the approved distribution correction and remains guided rather than answer-dumping.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T2",
+      "subpart": "NONE",
+      "text": "The expected next reply and on-track follow-up stay on the verified path 3x + 3 = 15, then subtract 3 before dividing by 3.",
+      "target_fields": [
+        "next_expected_student_reply",
+        "if_on_track"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "S1",
+        "S2"
+      ],
+      "why_supported": "Those fields are covered by the freshly verified continuation claims and do not introduce new unsupported math.",
+      "why_not_supported": "NONE"
+    }
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Mathematics LibreTexts - Multi-Step Linear Equations",
+      "role": "PACKET_CONTEXT",
+      "classification": "CONCEPT_MATCH",
+      "url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": true,
+      "from_cache": true,
+      "copied_text": "Using this property we multiply the number in front of the parentheses by each term inside of the parentheses.",
+      "locator": "lines 409-415",
+      "why_this_source_counts": "Reused verified support for the distribution correction."
+    },
+    {
+      "id": "S2",
+      "title": "OpenStax Algebra 1 - Explaining Acceptable Moves to Solve an Equation",
+      "role": "PACKET_CONTEXT",
+      "classification": "CONCEPT_MATCH",
+      "url": "https://openstax.org/books/algebra-1/pages/1-7-2-explaining-acceptable-moves-to-solve-an-equation",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": true,
+      "from_cache": true,
+      "copied_text": "Use the Multiplication or Division Property of Equality.",
+      "locator": "lines 109-111",
+      "why_this_source_counts": "Reused verified support for isolating the variable after the corrected distribution."
+    }
+  ],
+  "checked_urls": [
+    {
+      "url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Reused directly opened support already verified in the current turn."
+    },
+    {
+      "url": "https://openstax.org/books/algebra-1/pages/1-7-2-explaining-acceptable-moves-to-solve-an-equation",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Reused directly opened support already verified in the current turn."
+    }
+  ],
+  "proof_dossier_copy": [
+    {
+      "claim_id": "T1",
+      "target_fields": [
+        "message_to_tutor_now",
+        "if_confused",
+        "current_step"
+      ],
+      "url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "copied_text": "Using this property we multiply the number in front of the parentheses by each term inside of the parentheses.",
+      "why_this_excerpt_matters": "Supports the guided correction in the live reply."
+    },
+    {
+      "claim_id": "T2",
+      "target_fields": [
+        "next_expected_student_reply",
+        "if_on_track"
+      ],
+      "url": "https://openstax.org/books/algebra-1/pages/1-7-2-explaining-acceptable-moves-to-solve-an-equation",
+      "copied_text": "Use the Multiplication or Division Property of Equality.",
+      "why_this_excerpt_matters": "Supports the on-track follow-up after the student fixes the distribution."
+    }
+  ],
+  "turn_level_checks": [
+    {
+      "id": "TLC1",
+      "purpose": "transcript_parse",
+      "query": "Does the live reply address the latest student line rather than the earlier tutor line?",
+      "opened_url": "packet://00-turn-input.json",
+      "url_status": "LIVE",
+      "finding": "Yes. The live reply directly addresses the latest student claim about 3x + 1 and x = 14."
+    },
+    {
+      "id": "TLC2",
+      "purpose": "dossier_coverage",
+      "query": "Are all six live tutor fields covered by the current verified answer packet?",
+      "opened_url": "packet://03-verified-answer-packet.json",
+      "url_status": "LIVE",
+      "finding": "Yes. No new substantive claim appears outside the newly verified distribution correction and solve path."
+    }
+  ],
+  "claim_results": [
+    {
+      "id": "T1",
+      "result": "PASS",
+      "reason": "The live reply is guided, brief, and tied to the verified correction.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T2",
+      "result": "PASS",
+      "reason": "The expected student reply and on-track follow-up stay inside the approved continuation path.",
+      "approved_for_use": true
+    }
+  ],
+  "approved_claim_ids": [
+    "T1",
+    "T2"
+  ],
+  "blocked_claim_ids": [],
+  "supporting_sources": [
+    {
+      "id": "S1",
+      "title": "Mathematics LibreTexts - Multi-Step Linear Equations",
+      "url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "Using this property we multiply the number in front of the parentheses by each term inside of the parentheses.",
+      "why_it_matters": "Supports the corrected distribution language in the live reply."
+    },
+    {
+      "id": "S2",
+      "title": "OpenStax Algebra 1 - Explaining Acceptable Moves to Solve an Equation",
+      "url": "https://openstax.org/books/algebra-1/pages/1-7-2-explaining-acceptable-moves-to-solve-an-equation",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "Use the Multiplication or Division Property of Equality.",
+      "why_it_matters": "Supports the follow-up move after the student corrects the distribution."
+    }
+  ],
+  "approved_target_fields": {
+    "message_to_tutor_now": true,
+    "next_expected_student_reply": true,
+    "if_on_track": true,
+    "if_confused": true,
+    "silence_breaker": true,
+    "current_step": true
+  },
+  "mismatch_evidence": [],
+  "mismatches": [],
+  "repair_instructions": [],
+  "transcript_verdict": "NONE",
+  "transcript_findings": [],
+  "escalation_recommended": false,
+  "unsupported_claim_ids": [],
+  "conflicts": [],
+  "missing_data": [],
+  "rationale": "The continuation reply is tied to the latest student line, uses the requested near-correct phrasing, stays guided instead of giving the answer away, and remains fully covered by the freshly verified continuation dossier."
+}

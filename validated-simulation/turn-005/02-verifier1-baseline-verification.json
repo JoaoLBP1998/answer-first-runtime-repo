@@ -1,0 +1,189 @@
+{
+  "mode": "BASELINE_ANSWER_VERIFICATION",
+  "proof_status": "DONE",
+  "status": "PASS",
+  "coverage_status": "ANSWER_READY",
+  "claims": [
+    {
+      "id": "A4",
+      "subpart": "(a)",
+      "text": "Distributing 3 across x + 1 gives 3x + 3, so 3(x + 1) = 15 is equivalent to 3x + 3 = 15.",
+      "target_fields": [
+        "answer_claims[id=A4].text",
+        "solved_answers[subpart=(a)].reasoning_steps[0]"
+      ],
+      "verification_mode": "LIVE_CHECK_PLUS_PACKET_CONTEXT",
+      "result": "SUPPORTED",
+      "required_source_count": 2,
+      "accepted_source_ids": [
+        "S1",
+        "S2"
+      ],
+      "why_supported": "LibreTexts explicitly states that the outside factor multiplies each term inside the parentheses, and OpenStax requires using the distributive property to remove parentheses before solving.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "A5",
+      "subpart": "(a)",
+      "text": "From 3x + 3 = 15, subtract 3 from both sides to get 3x = 12, then divide by 3 to get x = 4.",
+      "target_fields": [
+        "answer_claims[id=A5].text",
+        "solved_answers[subpart=(a)].final_answer",
+        "solved_answers[subpart=(a)].reasoning_steps[1]",
+        "solved_answers[subpart=(a)].reasoning_steps[2]"
+      ],
+      "verification_mode": "LIVE_CHECK_PLUS_PACKET_CONTEXT",
+      "result": "SUPPORTED",
+      "required_source_count": 2,
+      "accepted_source_ids": [
+        "S1",
+        "S2"
+      ],
+      "why_supported": "The LibreTexts worked example removes parentheses, subtracts the constant term, and then divides by the coefficient. OpenStax independently states to move constants and use the multiplication or division property to make the coefficient 1.",
+      "why_not_supported": "NONE"
+    }
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "Mathematics LibreTexts - Multi-Step Linear Equations",
+      "role": "METHOD_AUTHORITY",
+      "classification": "CONCEPT_MATCH",
+      "url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": true,
+      "from_cache": false,
+      "copied_text": "Using this property we multiply the number in front of the parentheses by each term inside of the parentheses.",
+      "locator": "lines 409-415",
+      "why_this_source_counts": "It directly supports the corrected distribution and the worked multi-step pattern."
+    },
+    {
+      "id": "S2",
+      "title": "OpenStax Algebra 1 - Explaining Acceptable Moves to Solve an Equation",
+      "role": "REDUNDANCY_CHECK",
+      "classification": "CONCEPT_MATCH",
+      "url": "https://openstax.org/books/algebra-1/pages/1-7-2-explaining-acceptable-moves-to-solve-an-equation",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": true,
+      "from_cache": false,
+      "copied_text": "Use the Distributive Property to remove any parentheses.",
+      "locator": "lines 98-100",
+      "why_this_source_counts": "It independently confirms the remove-parentheses step and the general solve-equation workflow."
+    }
+  ],
+  "checked_urls": [
+    {
+      "url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Opened directly and matched the multi-step linear-equation topic."
+    },
+    {
+      "url": "https://openstax.org/books/algebra-1/pages/1-7-2-explaining-acceptable-moves-to-solve-an-equation",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Opened directly and matched the acceptable algebra moves topic."
+    }
+  ],
+  "proof_dossier_copy": [
+    {
+      "claim_id": "A4",
+      "target_fields": [
+        "answer_claims[id=A4].text",
+        "solved_answers[subpart=(a)].reasoning_steps[0]"
+      ],
+      "url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "copied_text": "Using this property we multiply the number in front of the parentheses by each term inside of the parentheses.",
+      "why_this_excerpt_matters": "It directly supports changing 3(x + 1) into 3x + 3."
+    },
+    {
+      "claim_id": "A5",
+      "target_fields": [
+        "answer_claims[id=A5].text",
+        "solved_answers[subpart=(a)].final_answer"
+      ],
+      "url": "https://openstax.org/books/algebra-1/pages/1-7-2-explaining-acceptable-moves-to-solve-an-equation",
+      "copied_text": "Use the Multiplication or Division Property of Equality.",
+      "why_this_excerpt_matters": "It supports making the variable coefficient equal to 1 after the constant is removed."
+    }
+  ],
+  "turn_level_checks": [
+    {
+      "id": "T1",
+      "purpose": "transcript_parse",
+      "query": "Latest student line introduces a distribution claim and tentative answer x = 14.",
+      "opened_url": "packet://00-turn-input.json",
+      "url_status": "LIVE",
+      "finding": "Fresh baseline verification is required because the student introduced a new substantive claim not covered by turn-004."
+    },
+    {
+      "id": "T2",
+      "purpose": "claim_falsification",
+      "query": "Does distributing 3 across x + 1 produce 3x + 3?",
+      "opened_url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "url_status": "LIVE",
+      "finding": "Yes. The source explicitly says the outside factor multiplies each term inside the parentheses."
+    }
+  ],
+  "claim_results": [
+    {
+      "id": "A4",
+      "result": "PASS",
+      "reason": "The distribution correction is directly supported by two opened educational sources.",
+      "approved_for_use": true
+    },
+    {
+      "id": "A5",
+      "result": "PASS",
+      "reason": "The corrected solve path to x = 4 matches the opened sources and is algebraically consistent.",
+      "approved_for_use": true
+    }
+  ],
+  "approved_claim_ids": [
+    "A4",
+    "A5"
+  ],
+  "blocked_claim_ids": [],
+  "supporting_sources": [
+    {
+      "id": "S1",
+      "title": "Mathematics LibreTexts - Multi-Step Linear Equations",
+      "url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "Using this property we multiply the number in front of the parentheses by each term inside of the parentheses.",
+      "why_it_matters": "Supports the corrected distribution step."
+    },
+    {
+      "id": "S2",
+      "title": "OpenStax Algebra 1 - Explaining Acceptable Moves to Solve an Equation",
+      "url": "https://openstax.org/books/algebra-1/pages/1-7-2-explaining-acceptable-moves-to-solve-an-equation",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "Use the Distributive Property to remove any parentheses.",
+      "why_it_matters": "Supports removing parentheses before completing the solve path."
+    }
+  ],
+  "approved_target_fields": {
+    "answer_claims[id=A4].text": true,
+    "answer_claims[id=A5].text": true,
+    "solved_answers[subpart=(a)].final_answer": true,
+    "solved_answers[subpart=(a)].reasoning_steps[0]": true,
+    "solved_answers[subpart=(a)].reasoning_steps[1]": true,
+    "solved_answers[subpart=(a)].reasoning_steps[2]": true
+  },
+  "mismatch_evidence": [],
+  "mismatches": [],
+  "repair_instructions": [],
+  "transcript_verdict": "NONE",
+  "transcript_findings": [],
+  "escalation_recommended": false,
+  "unsupported_claim_ids": [],
+  "conflicts": [],
+  "missing_data": [],
+  "rationale": "The continuation introduced a real new claim about distribution, so the verifier ran a fresh baseline check. Two directly opened educational sources support the corrected distribution and the solve path to x = 4."
+}

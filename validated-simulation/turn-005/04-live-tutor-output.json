@@ -1,0 +1,9 @@
+{
+  "message_to_tutor_now": "You're almost there. If you distribute the 3, it has to multiply both x and 1. What should 3(x + 1) become before you solve?",
+  "next_expected_student_reply": "The student should say 3x + 3 = 15.",
+  "if_on_track": "Nice catch. From 3x + 3 = 15, what inverse operation will undo the +3 first?",
+  "if_confused": "Quite close. The 3 outside the parentheses multiplies both terms inside, so the left side becomes 3x + 3.",
+  "silence_breaker": "What is 3 times 1 in the parentheses?",
+  "current_step": "Correct the distribution, then isolate x.",
+  "approval_state": "APPROVED"
+}

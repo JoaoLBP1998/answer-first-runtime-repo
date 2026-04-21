@@ -1,0 +1,165 @@
+{
+  "mode": "BASELINE_ANSWER_VERIFICATION",
+  "proof_status": "DONE",
+  "status": "PASS",
+  "coverage_status": "ANSWER_READY",
+  "claims": [
+    {
+      "id": "A1",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "From 3c = b, dividing both sides by 3 gives c = b / 3, so c + 3 = b / 3 + 3 and the correct choice is E.",
+      "target_fields": [
+        "answer_claims[id=A1].text",
+        "solved_answers[subpart=WHOLE_EXERCISE].final_answer",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]"
+      ],
+      "verification_mode": "LIVE_CHECK_PLUS_PACKET_CONTEXT",
+      "result": "SUPPORTED",
+      "required_source_count": 2,
+      "accepted_source_ids": [
+        "S1",
+        "S2"
+      ],
+      "why_supported": "Two directly opened instructional sources support dividing both sides by 3 to isolate the variable and preserving equality when the same operation is applied on both sides.",
+      "why_not_supported": "NONE"
+    }
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "1.1 Solving One-Step Linear Equations | Elementary Algebra",
+      "role": "METHOD_AUTHORITY",
+      "classification": "CONCEPT_MATCH",
+      "url": "https://courses.lumenlearning.com/slcc-elementaryalgebra/chapter/1-1-solving-one-step-linear-equations/",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": true,
+      "from_cache": false,
+      "copied_text": "Divide both sides of the equation by 3 to isolate the variable.",
+      "locator": "turn1view0 lines 152-158",
+      "why_this_source_counts": "Directly supports the algebra move from 3c = b to c = b / 3."
+    },
+    {
+      "id": "S2",
+      "title": "4.7 Solve Equations with Fractions - Prealgebra | OpenStax",
+      "role": "REDUNDANCY_CHECK",
+      "classification": "CONCEPT_MATCH",
+      "url": "https://openstax.org/books/prealgebra/pages/4-7-solve-equations-with-fractions",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": true,
+      "from_cache": false,
+      "copied_text": "When you add or divide the same quantity from both sides of an equation, you still have equality.",
+      "locator": "turn3view0 lines 117-118",
+      "why_this_source_counts": "Confirms the equality-preserving operations used to derive c = b / 3 and then c + 3."
+    }
+  ],
+  "checked_urls": [
+    {
+      "url": "https://courses.lumenlearning.com/slcc-elementaryalgebra/chapter/1-1-solving-one-step-linear-equations/",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Opened directly; supports dividing both sides by 3."
+    },
+    {
+      "url": "https://openstax.org/books/prealgebra/pages/4-7-solve-equations-with-fractions",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Opened directly; supports equality under identical operations on both sides."
+    }
+  ],
+  "proof_dossier_copy": [
+    {
+      "claim_id": "A1",
+      "target_fields": [
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]"
+      ],
+      "url": "https://courses.lumenlearning.com/slcc-elementaryalgebra/chapter/1-1-solving-one-step-linear-equations/",
+      "copied_text": "Divide both sides of the equation by 3 to isolate the variable.",
+      "why_this_excerpt_matters": "Verifies the isolation step c = b / 3."
+    },
+    {
+      "claim_id": "A1",
+      "target_fields": [
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+        "solved_answers[subpart=WHOLE_EXERCISE].final_answer"
+      ],
+      "url": "https://openstax.org/books/prealgebra/pages/4-7-solve-equations-with-fractions",
+      "copied_text": "When you add or divide the same quantity from both sides of an equation, you still have equality.",
+      "why_this_excerpt_matters": "Supports the equality-preserving operations used in the final expression."
+    }
+  ],
+  "turn_level_checks": [
+    {
+      "id": "T1",
+      "purpose": "claim_falsification",
+      "query": "solve 3c = b by isolating c",
+      "opened_url": "https://courses.lumenlearning.com/slcc-elementaryalgebra/chapter/1-1-solving-one-step-linear-equations/",
+      "url_status": "LIVE",
+      "finding": "Method check supports dividing both sides by 3 to isolate the variable."
+    },
+    {
+      "id": "T2",
+      "purpose": "claim_falsification",
+      "query": "addition and division properties of equality",
+      "opened_url": "https://openstax.org/books/prealgebra/pages/4-7-solve-equations-with-fractions",
+      "url_status": "LIVE",
+      "finding": "Equality is preserved when the same quantity is added or divided on both sides."
+    }
+  ],
+  "claim_results": [
+    {
+      "id": "A1",
+      "result": "PASS",
+      "reason": "The controller answer uses a standard one-step equation transformation and matches the available choices.",
+      "approved_for_use": true
+    }
+  ],
+  "approved_claim_ids": [
+    "A1"
+  ],
+  "blocked_claim_ids": [],
+  "supporting_sources": [
+    {
+      "id": "S1",
+      "title": "1.1 Solving One-Step Linear Equations | Elementary Algebra",
+      "url": "https://courses.lumenlearning.com/slcc-elementaryalgebra/chapter/1-1-solving-one-step-linear-equations/",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "Divide both sides of the equation by 3 to isolate the variable.",
+      "why_it_matters": "Supports c = b / 3."
+    },
+    {
+      "id": "S2",
+      "title": "4.7 Solve Equations with Fractions - Prealgebra | OpenStax",
+      "url": "https://openstax.org/books/prealgebra/pages/4-7-solve-equations-with-fractions",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "When you add or divide the same quantity from both sides of an equation, you still have equality.",
+      "why_it_matters": "Supports the equality-preserving operations behind the final expression."
+    }
+  ],
+  "approved_target_fields": {
+    "answer_claims[id=A1].text": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].final_answer": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]": true
+  },
+  "mismatch_evidence": [],
+  "mismatches": [],
+  "repair_instructions": [],
+  "transcript_verdict": "NONE",
+  "transcript_findings": [],
+  "escalation_recommended": false,
+  "unsupported_claim_ids": [],
+  "conflicts": [],
+  "missing_data": [],
+  "rationale": "The controller answer is supported by two independently opened live instructional sources and no contradictory evidence was found."
+}

@@ -1,0 +1,8 @@
+{
+  "run_id": "answer-first-run-2026-04-21-turn-005",
+  "turn_id": "turn-005",
+  "current_stage": "cleanup_complete",
+  "thread_state_reliable": true,
+  "last_completed_stage": "cleanup_complete",
+  "blocked_on_stage": "NONE"
+}

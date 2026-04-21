@@ -1,0 +1,44 @@
+{
+  "status": "READY",
+  "approved_claim_ids": [
+    "A4",
+    "A5"
+  ],
+  "approved_answer_fields": [
+    "answer_claims[id=A4].text",
+    "answer_claims[id=A5].text",
+    "solved_answers[subpart=(a)].final_answer",
+    "solved_answers[subpart=(a)].reasoning_steps[0]",
+    "solved_answers[subpart=(a)].reasoning_steps[1]",
+    "solved_answers[subpart=(a)].reasoning_steps[2]"
+  ],
+  "verified_source_ids": [
+    "S1",
+    "S2"
+  ],
+  "proof_dossier_copy": [
+    {
+      "claim_id": "A4",
+      "target_fields": [
+        "answer_claims[id=A4].text",
+        "solved_answers[subpart=(a)].reasoning_steps[0]"
+      ],
+      "url": "https://math.libretexts.org/Courses/Lumen_Learning/Beginning_Algebra_%28Lumen%29/01%3A_Solving_Equations_and_Inequalities/1.03%3A_Multi-Step_Linear_Equations",
+      "copied_text": "Using this property we multiply the number in front of the parentheses by each term inside of the parentheses.",
+      "why_this_excerpt_matters": "Supports correcting the student's distribution."
+    },
+    {
+      "claim_id": "A5",
+      "target_fields": [
+        "answer_claims[id=A5].text",
+        "solved_answers[subpart=(a)].final_answer"
+      ],
+      "url": "https://openstax.org/books/algebra-1/pages/1-7-2-explaining-acceptable-moves-to-solve-an-equation",
+      "copied_text": "Use the Multiplication or Division Property of Equality.",
+      "why_this_excerpt_matters": "Supports finishing the solve path after the distribution is corrected."
+    }
+  ],
+  "risk_flags": [
+    "classroom_transcript_continuation_with_fresh_distribution_claim"
+  ]
+}

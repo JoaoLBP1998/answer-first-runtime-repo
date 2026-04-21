@@ -1,0 +1,167 @@
+{
+  "mode": "BASELINE_ANSWER_VERIFICATION",
+  "proof_status": "DONE",
+  "status": "PASS",
+  "coverage_status": "ANSWER_READY",
+  "claims": [
+    {
+      "id": "A1",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "Distribute first to get 3x + 3 = 15, subtract 3 to get 3x = 12, and divide by 3 to get x = 4.",
+      "target_fields": [
+        "answer_claims[id=A1].text",
+        "solved_answers[subpart=WHOLE_EXERCISE].final_answer",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]"
+      ],
+      "verification_mode": "LIVE_CHECK_PLUS_PACKET_CONTEXT",
+      "result": "SUPPORTED",
+      "required_source_count": 2,
+      "accepted_source_ids": [
+        "S1",
+        "S2"
+      ],
+      "why_supported": "Two directly opened instructional sources support applying the distributive property first and then isolating the variable with equality-preserving operations.",
+      "why_not_supported": "NONE"
+    }
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "title": "2.2 Linear Equations in One Variable | OpenStax College Algebra 2e",
+      "role": "METHOD_AUTHORITY",
+      "classification": "CONCEPT_MATCH",
+      "url": "https://openstax.org/books/college-algebra-2e/pages/2-2-linear-equations-in-one-variable",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": true,
+      "from_cache": false,
+      "copied_text": "We may add, subtract, multiply, or divide an equation by a number or an expression as long as we do the same thing to both sides of the equal sign. Apply the distributive property as needed. Isolate the variable on one side of the equation.",
+      "locator": "How To: Given a linear equation in one variable, use algebra to solve it",
+      "why_this_source_counts": "Directly supports distribution and equality-preserving operations."
+    },
+    {
+      "id": "S2",
+      "title": "2.1 Linear Equations | Mathematics LibreTexts",
+      "role": "REDUNDANCY_CHECK",
+      "classification": "CONCEPT_MATCH",
+      "url": "https://math.libretexts.org/Courses/SUNY_Geneseo/Math_113%3A_Finite_Math_for_Society/02%3A_Linear_Equations/2.01%3A_Linear_Equations",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": true,
+      "from_cache": false,
+      "copied_text": "Notice the first step is distributing, then it is solved like any other two-step equation. Step 1. Apply the distributive property to rewrite the equation without parentheses.",
+      "locator": "Example PageIndex 21 and general strategy steps 1-4",
+      "why_this_source_counts": "Independently supports the same method sequence."
+    }
+  ],
+  "checked_urls": [
+    {
+      "url": "https://openstax.org/books/college-algebra-2e/pages/2-2-linear-equations-in-one-variable",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Opened directly; supports distributing and isolating the variable with equality-preserving operations."
+    },
+    {
+      "url": "https://math.libretexts.org/Courses/SUNY_Geneseo/Math_113%3A_Finite_Math_for_Society/02%3A_Linear_Equations/2.01%3A_Linear_Equations",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Opened directly; supports distributing first and then solving the resulting two-step equation."
+    }
+  ],
+  "proof_dossier_copy": [
+    {
+      "claim_id": "A1",
+      "target_fields": [
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]"
+      ],
+      "url": "https://openstax.org/books/college-algebra-2e/pages/2-2-linear-equations-in-one-variable",
+      "copied_text": "Apply the distributive property as needed and isolate the variable on one side of the equation.",
+      "why_this_excerpt_matters": "Supports the distribution step and the move to 3x + 3 = 15."
+    },
+    {
+      "claim_id": "A1",
+      "target_fields": [
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]",
+        "solved_answers[subpart=WHOLE_EXERCISE].final_answer"
+      ],
+      "url": "https://math.libretexts.org/Courses/SUNY_Geneseo/Math_113%3A_Finite_Math_for_Society/02%3A_Linear_Equations/2.01%3A_Linear_Equations",
+      "copied_text": "Notice the first step is distributing, then it is solved like any other two-step equation.",
+      "why_this_excerpt_matters": "Supports solving the simplified equation by standard two-step operations."
+    }
+  ],
+  "turn_level_checks": [
+    {
+      "id": "T1",
+      "purpose": "claim_falsification",
+      "query": "solve linear equation with distribution first",
+      "opened_url": "https://openstax.org/books/college-algebra-2e/pages/2-2-linear-equations-in-one-variable",
+      "url_status": "LIVE",
+      "finding": "The method matches the standard distribute, simplify, and isolate sequence."
+    },
+    {
+      "id": "T2",
+      "purpose": "claim_falsification",
+      "query": "distribute then solve two-step equation",
+      "opened_url": "https://math.libretexts.org/Courses/SUNY_Geneseo/Math_113%3A_Finite_Math_for_Society/02%3A_Linear_Equations/2.01%3A_Linear_Equations",
+      "url_status": "LIVE",
+      "finding": "The method is independently supported and no contradiction was found."
+    }
+  ],
+  "claim_results": [
+    {
+      "id": "A1",
+      "result": "PASS",
+      "reason": "The controller answer follows a standard, source-supported linear-equation method and yields x = 4.",
+      "approved_for_use": true
+    }
+  ],
+  "approved_claim_ids": [
+    "A1"
+  ],
+  "blocked_claim_ids": [],
+  "supporting_sources": [
+    {
+      "id": "S1",
+      "title": "2.2 Linear Equations in One Variable | OpenStax College Algebra 2e",
+      "url": "https://openstax.org/books/college-algebra-2e/pages/2-2-linear-equations-in-one-variable",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "Apply the distributive property as needed and isolate the variable on one side of the equation.",
+      "why_it_matters": "Supports the first half of the solution path."
+    },
+    {
+      "id": "S2",
+      "title": "2.1 Linear Equations | Mathematics LibreTexts",
+      "url": "https://math.libretexts.org/Courses/SUNY_Geneseo/Math_113%3A_Finite_Math_for_Society/02%3A_Linear_Equations/2.01%3A_Linear_Equations",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "Notice the first step is distributing, then it is solved like any other two-step equation.",
+      "why_it_matters": "Supports the distribute-then-solve sequence."
+    }
+  ],
+  "approved_target_fields": {
+    "answer_claims[id=A1].text": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].final_answer": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]": true,
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]": true
+  },
+  "mismatch_evidence": [],
+  "mismatches": [],
+  "repair_instructions": [],
+  "transcript_verdict": "NONE",
+  "transcript_findings": [],
+  "escalation_recommended": false,
+  "unsupported_claim_ids": [],
+  "conflicts": [],
+  "missing_data": [],
+  "rationale": "The controller answer is supported by two independently opened live instructional sources and no contradictory evidence was found."
+}

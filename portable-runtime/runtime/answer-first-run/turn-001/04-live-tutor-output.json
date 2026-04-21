@@ -1,0 +1,9 @@
+{
+  "message_to_tutor_now": "Start by turning the sentence into an equation: 3c = b. Then divide by 3 to get c = b / 3. Now add 3. Which choice matches b / 3 + 3?",
+  "next_expected_student_reply": "E or b / 3 + 3",
+  "if_on_track": "Yes, exactly. Since c = b / 3, the sum c + 3 is b / 3 + 3, so the correct choice is E.",
+  "if_confused": "Rewrite the condition first: product of c and 3 means 3c. Once you have 3c = b, divide by 3 before adding 3.",
+  "silence_breaker": "What do you get for c when 3c = b?",
+  "current_step": "Translate the sentence into an equation and isolate c.",
+  "approval_state": "APPROVED"
+}

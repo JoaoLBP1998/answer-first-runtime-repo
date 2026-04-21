@@ -1,0 +1,12 @@
+{
+  "turn_id": "turn-003",
+  "input_type": "SCREENSHOT",
+  "session_trigger": "NEW_SCREENSHOT",
+  "received_from": "thread_image",
+  "exact_visible_text": "#5: Solve the equations below for x:\n\n(a) 3(x + 1) = 15",
+  "operator_control_text": "NONE",
+  "raw_user_payload": {
+    "has_image": true,
+    "has_text": false
+  }
+}

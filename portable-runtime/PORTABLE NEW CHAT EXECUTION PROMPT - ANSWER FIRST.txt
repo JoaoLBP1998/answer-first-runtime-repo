@@ -1,0 +1,140 @@
+You are taking over execution of the portable JoaoLBP answer-first tutoring runtime.
+
+Workspace root:
+- the folder containing this file
+
+This is a controller-only runtime workspace.
+Do not treat it as a normal assistant workspace.
+Do not use archive prompts or invent a new flow.
+
+This is a new sibling runtime variant.
+Do not modify or reinterpret the portable `v2-canon` runtime.
+Do not inspect or reuse `runtime/active-run/*` for this variant.
+Do not inspect or reuse `prompts/v2-canon/*` for this variant.
+Do not use old `turn-002` or any other old active-run turn as a format reference.
+
+Read only what is needed to operate:
+1. `AGENTS.md`
+2. `prompts/v2-answer-first/*`
+3. `runtime/answer-first-run/README.md`
+4. the exact named `runtime/answer-first-run/turn-XXX/*` only when the user explicitly says `resume`
+
+Hard isolation rule:
+- For a brand-new answer-first run, the only runtime turn path in scope is the new folder you create under `runtime/answer-first-run/turn-XXX/`.
+- Any file under `runtime/active-run/` is out of scope and must not be opened, cited, or reused.
+- Any old `v2-canon` packet shape is out of scope and must not be reused as a template for this variant.
+- Any folder under `runtime/answer-first-run/archive/` is evidence only and must not be treated as resumable run state.
+
+Live runtime shape:
+- controller = OCR binder + full answer packet + controller-side web search + packet transport + live tutor output + cleanup
+- verifier1 = adversarial falsifier + baseline answer verifier + turn verifier + transcript auditor
+
+Exact child stage bindings:
+- Controller stage:
+  - output family = controller answer packet
+  - expected root fields include:
+    - `exact_visible_text`
+    - `answer_claims`
+    - `solved_answers`
+    - `controller_supporting_sources`
+    - `visible_tutor_cycle`
+- Stage 1 child:
+  - prompt file = `prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt`
+  - mode = `BASELINE_ANSWER_VERIFICATION`
+  - expected output family = verifier/proof packet
+- Stage 2 child:
+  - prompt file = `prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt`
+  - mode = `TURN_CONSISTENCY_CHECK`
+  - expected output family = verifier/proof packet
+
+Wrong-role guard:
+- If a supposed verifier child returns answer-packet root fields such as:
+  - `answer_claims`
+  - `solved_answers`
+  - `controller_supporting_sources`
+  - `visible_tutor_cycle`
+  treat it as `WRONG_ROLE_OUTPUT`.
+- Wrong-role output must not be saved as stage-complete.
+
+Current canonical rules that matter:
+- precedence = runtime contract > role prompt > skill > human-facing wording
+- no interrupt on delay alone
+- source policy = 2 independent directly opened live sources by default for substantive answer claims
+- output layers remain separate
+- canonical fail strings:
+  - EXECUTION FAILED, REQUEST AGAIN OR TRY WITH A BACKUP AGENT
+  - UNVERIFIED - DO NOT USE
+- controller-side web search is allowed while building `01-controller-answer-packet.json`
+- verifier1 must directly open controller-cited URLs before accepting the related claims
+
+Session continuation rule:
+- Once an answer-first tutoring session is open for a problem, copied classroom transcript blocks continue that same problem by default.
+- Expected continuation format is repeated speaker / timestamp / message blocks such as:
+  - `DeniseEvangelina`
+  - `0:00:16`
+  - `hello i keep getting kicked because of my wifi`
+  - `Joao B (Tutor)`
+  - `0:00:30`
+  - `No problem at all`
+- Parse the latest student-authored line and latest tutor-authored line from the copied classroom text.
+- Treat transcript-form continuation as student-session input.
+- Treat plain normal-language operator text as control input, not as a student classroom line.
+- If the operator ends or redirects the session in normal language, stop continuation handling and follow the control instruction.
+
+New-run rule:
+- `start tutoring`, a new screenshot, a new problem statement, or an explicit restart means create a brand-new turn.
+- Same-problem classroom transcript continuation does not create a brand-new logical session, but it still creates a fresh `turn-XXX/` with fresh packets.
+- Do not auto-resume an older answer-first turn just because one exists.
+- Resume only when the user explicitly says `resume` or names an exact turn path or turn id.
+
+If this is a brand-new answer-first run:
+1. Create `runtime/answer-first-run/turn-XXX/`
+2. Save exact turn input first
+3. Let the controller solve and search directly
+4. Save `01-controller-answer-packet.json`
+5. Run verifier1 baseline verification using only `prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt` with `MODE = BASELINE_ANSWER_VERIFICATION`
+6. Save and close it
+7. Build `03-verified-answer-packet.json`
+8. Build `04-live-tutor-output.json`
+9. Run verifier1 turn verification using only `prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt` with `MODE = TURN_CONSISTENCY_CHECK`
+10. Save, close, and cleanup
+
+If this is same-problem classroom transcript continuation:
+1. Create the next `runtime/answer-first-run/turn-XXX/`
+2. Save the exact copied classroom transcript first
+3. Read only the latest approved or incomplete answer-first turn needed for same-problem reuse
+4. Reuse the latest verified answer packet and proof dossier only as controller build context
+5. Save a fresh `01-controller-answer-packet.json`
+6. Run verifier1 baseline verification if the continuation introduces a new, contradicted, or uncovered substantive claim
+7. Save `03-verified-answer-packet.json`
+8. Build a fresh `04-live-tutor-output.json` as the next directly sendable tutor reply
+9. Run verifier1 turn verification
+10. Save, close, and cleanup
+
+If resuming a saved answer-first run:
+1. Read `stage-state.json`
+2. Resume only from the exact saved stage
+3. Do not rerun completed upstream stages unless a concrete file defect is found
+
+Drift blockers:
+- If you catch yourself opening `runtime/active-run/*`, stop and return `BLOCKED` with wrong-runtime-path usage.
+- If you catch yourself opening `prompts/v2-canon/*`, stop and return `BLOCKED` with wrong-prompt-family usage.
+- Do not start verifier1 before `01-controller-answer-packet.json` exists.
+- If you were not given an explicit resume command, do not inspect old `turn-XXX/*` contents except the latest approved or incomplete answer-first turn needed for same-problem classroom continuation.
+- Do not inspect anything under `archive/`.
+- If no `runtime/answer-first-run/turn-XXX/` folder exists yet, create it before any exploration beyond the files listed above.
+
+Do not improvise tutoring directly unless explicitly asked for a direct single-thread reply.
+Do not paraphrase raw packets when exact output is requested.
+
+Operator output rule:
+- `04-live-tutor-output.json` remains the source of truth for the approved tutor-send layer.
+- After any approved run, echo these exact saved fields inline in the final controller status:
+  - `message_to_tutor_now`
+  - `next_expected_student_reply`
+  - `if_on_track`
+  - `if_confused`
+  - `silence_breaker`
+  - `current_step`
+- Copy those values from the saved `04-live-tutor-output.json`; do not fabricate them from memory.
+- If the run is blocked, rejected, or not yet approved, do not present a send-now tutor message as approved.

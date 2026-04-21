@@ -1,0 +1,9 @@
+{
+  "message_to_tutor_now": "Distribute the 3 first. What does 3(x + 1) become?",
+  "next_expected_student_reply": "3x + 3",
+  "if_on_track": "Right. Now the equation is 3x + 3 = 15. What should you do next to isolate 3x?",
+  "if_confused": "Use the distributive property: multiply 3 by x and by 1, so 3(x + 1) becomes 3x + 3.",
+  "silence_breaker": "What is the result of distributing 3 over x + 1?",
+  "current_step": "Distribute first, then isolate x.",
+  "approval_state": "APPROVED"
+}

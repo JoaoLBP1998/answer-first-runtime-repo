@@ -1,0 +1,277 @@
+{
+  "mode": "TURN_CONSISTENCY_CHECK",
+  "proof_status": "DONE",
+  "status": "PASS",
+  "coverage_status": "COVERED_BY_DOSSIER",
+  "claims": [
+    {
+      "id": "T1",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "message_to_tutor_now asks the student to distribute first, which is the verified next step.",
+      "target_fields": [
+        "message_to_tutor_now"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "The message stays inside the verified solution path and does not answer-dump.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T2",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "next_expected_student_reply is 3x + 3.",
+      "target_fields": [
+        "next_expected_student_reply"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "The verified answer packet already establishes the first transformed equation.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T3",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "if_on_track advances from 3x + 3 = 15 to isolating 3x without giving the full solution.",
+      "target_fields": [
+        "if_on_track"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "This follow-up remains guided and inside the approved solution path.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T4",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "if_confused restates only the verified distribution step.",
+      "target_fields": [
+        "if_confused"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P2"
+      ],
+      "why_supported": "This field only re-explains the first verified step.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T5",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "silence_breaker asks for the same verified distribution step.",
+      "target_fields": [
+        "silence_breaker"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P2"
+      ],
+      "why_supported": "The prompt stays on the exact next step.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T6",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "current_step is to distribute first and then isolate x.",
+      "target_fields": [
+        "current_step"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "The step label matches the verified answer packet.",
+      "why_not_supported": "NONE"
+    }
+  ],
+  "sources": [
+    {
+      "id": "P1",
+      "title": "Verified answer packet",
+      "role": "PACKET_CONTEXT",
+      "classification": "PACKET",
+      "url": "runtime/answer-first-run/turn-002/03-verified-answer-packet.json",
+      "opened_live": false,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": false,
+      "from_cache": false,
+      "copied_text": "Approved claim A1 shows the first transformed equation 3x + 3 = 15 and the full solution path to x = 4.",
+      "locator": "proof_dossier_copy",
+      "why_this_source_counts": "Current-turn verified dossier covers all substantive live-send content."
+    },
+    {
+      "id": "P2",
+      "title": "Controller answer packet",
+      "role": "PACKET_CONTEXT",
+      "classification": "PACKET",
+      "url": "runtime/answer-first-run/turn-002/01-controller-answer-packet.json",
+      "opened_live": false,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": false,
+      "from_cache": false,
+      "copied_text": "visible_tutor_cycle asks the student to distribute first and then continue isolating x.",
+      "locator": "visible_tutor_cycle",
+      "why_this_source_counts": "Confirms wording consistency with the saved controller plan."
+    }
+  ],
+  "checked_urls": [
+    {
+      "url": "runtime/answer-first-run/turn-002/03-verified-answer-packet.json",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Checked the current verified dossier for substantive coverage."
+    },
+    {
+      "url": "runtime/answer-first-run/turn-002/01-controller-answer-packet.json",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Checked the saved controller cycle for wording consistency."
+    }
+  ],
+  "proof_dossier_copy": [
+    {
+      "claim_id": "T1",
+      "target_fields": [
+        "message_to_tutor_now",
+        "next_expected_student_reply",
+        "if_on_track",
+        "current_step"
+      ],
+      "url": "runtime/answer-first-run/turn-002/03-verified-answer-packet.json",
+      "copied_text": "Approved claim A1 shows the first transformed equation 3x + 3 = 15 and the full solution path to x = 4.",
+      "why_this_excerpt_matters": "Covers the substantive math content referenced by the live tutor fields."
+    },
+    {
+      "claim_id": "T4",
+      "target_fields": [
+        "if_confused",
+        "silence_breaker"
+      ],
+      "url": "runtime/answer-first-run/turn-002/01-controller-answer-packet.json",
+      "copied_text": "visible_tutor_cycle asks the student to distribute first and then continue isolating x.",
+      "why_this_excerpt_matters": "Covers the guided wording used for the fallback and silence-breaker fields."
+    }
+  ],
+  "turn_level_checks": [
+    {
+      "id": "TC1",
+      "purpose": "dossier_coverage",
+      "query": "Compare live tutor output against the verified answer packet and controller cycle",
+      "opened_url": "runtime/answer-first-run/turn-002/03-verified-answer-packet.json",
+      "url_status": "LIVE",
+      "finding": "All substantive live fields are covered by the current verified dossier."
+    },
+    {
+      "id": "TC2",
+      "purpose": "subject_sanity",
+      "query": "Ensure the live reply remains guided and tied to the current algebra step",
+      "opened_url": "runtime/answer-first-run/turn-002/01-controller-answer-packet.json",
+      "url_status": "LIVE",
+      "finding": "The reply stays guided, brief, and within the verified solution path."
+    }
+  ],
+  "claim_results": [
+    {
+      "id": "T1",
+      "result": "PASS",
+      "reason": "The main live message matches the verified first step.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T2",
+      "result": "PASS",
+      "reason": "Expected student reply matches the verified transformed equation.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T3",
+      "result": "PASS",
+      "reason": "On-track follow-up stays guided and inside the verified path.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T4",
+      "result": "PASS",
+      "reason": "Confusion fallback restates only the verified distribution step.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T5",
+      "result": "PASS",
+      "reason": "Silence breaker asks for the same verified intermediate step.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T6",
+      "result": "PASS",
+      "reason": "Current step matches the verified solution path.",
+      "approved_for_use": true
+    }
+  ],
+  "approved_claim_ids": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6"
+  ],
+  "blocked_claim_ids": [],
+  "supporting_sources": [
+    {
+      "id": "P1",
+      "title": "Verified answer packet",
+      "url": "runtime/answer-first-run/turn-002/03-verified-answer-packet.json",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "Approved claim A1 shows the first transformed equation 3x + 3 = 15 and the full solution path to x = 4.",
+      "why_it_matters": "Covers the substantive content in the approved live tutor output."
+    },
+    {
+      "id": "P2",
+      "title": "Controller answer packet",
+      "url": "runtime/answer-first-run/turn-002/01-controller-answer-packet.json",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "visible_tutor_cycle asks the student to distribute first and then continue isolating x.",
+      "why_it_matters": "Confirms the live reply remains guided and consistent with the controller plan."
+    }
+  ],
+  "approved_target_fields": {
+    "message_to_tutor_now": true,
+    "next_expected_student_reply": true,
+    "if_on_track": true,
+    "if_confused": true,
+    "silence_breaker": true,
+    "current_step": true
+  },
+  "mismatch_evidence": [],
+  "mismatches": [],
+  "repair_instructions": [],
+  "transcript_verdict": "NONE",
+  "transcript_findings": [],
+  "escalation_recommended": false,
+  "unsupported_claim_ids": [],
+  "conflicts": [],
+  "missing_data": [],
+  "rationale": "The live tutor packet stays guided, brief, and fully covered by the current verified dossier."
+}

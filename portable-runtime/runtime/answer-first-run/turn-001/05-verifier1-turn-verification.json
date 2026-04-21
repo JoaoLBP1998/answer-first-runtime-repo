@@ -1,0 +1,277 @@
+{
+  "mode": "TURN_CONSISTENCY_CHECK",
+  "proof_status": "DONE",
+  "status": "PASS",
+  "coverage_status": "COVERED_BY_DOSSIER",
+  "claims": [
+    {
+      "id": "T1",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "message_to_tutor_now guides the student to write 3c = b, solve for c, and match b / 3 + 3 without adding new claims.",
+      "target_fields": [
+        "message_to_tutor_now"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "The live prompt restates the verified answer path and stays guided rather than answer-dumping.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T2",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "next_expected_student_reply is E or b / 3 + 3.",
+      "target_fields": [
+        "next_expected_student_reply"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "The verified answer packet already establishes E and b / 3 + 3 as the correct response.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T3",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "if_on_track confirms the verified result E.",
+      "target_fields": [
+        "if_on_track"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "This field only affirms the already verified expression and correct choice.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T4",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "if_confused preserves the verified algebra path 3c = b, then divide by 3, then add 3.",
+      "target_fields": [
+        "if_confused"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "This field restates the verified method without introducing a new substantive claim.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T5",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "silence_breaker asks for c from 3c = b, which is the verified next step.",
+      "target_fields": [
+        "silence_breaker"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "The question stays inside the verified solution path.",
+      "why_not_supported": "NONE"
+    },
+    {
+      "id": "T6",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "current_step is to translate the sentence into an equation and isolate c.",
+      "target_fields": [
+        "current_step"
+      ],
+      "verification_mode": "DOSSIER_COVERED",
+      "result": "SUPPORTED",
+      "required_source_count": 0,
+      "accepted_source_ids": [
+        "P1"
+      ],
+      "why_supported": "This instruction matches the verified algebra sequence exactly.",
+      "why_not_supported": "NONE"
+    }
+  ],
+  "sources": [
+    {
+      "id": "P1",
+      "title": "Verified answer packet",
+      "role": "PACKET_CONTEXT",
+      "classification": "PACKET",
+      "url": "runtime/answer-first-run/turn-001/03-verified-answer-packet.json",
+      "opened_live": false,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": false,
+      "from_cache": false,
+      "copied_text": "Approved claim A1 shows c = b / 3 and c + 3 = b / 3 + 3, with correct choice E.",
+      "locator": "proof_dossier_copy",
+      "why_this_source_counts": "Current-run verified dossier covers all substantive live-send content."
+    },
+    {
+      "id": "P2",
+      "title": "Controller answer packet",
+      "role": "PACKET_CONTEXT",
+      "classification": "PACKET",
+      "url": "runtime/answer-first-run/turn-001/01-controller-answer-packet.json",
+      "opened_live": false,
+      "url_status": "LIVE",
+      "subject_match": true,
+      "independent": false,
+      "from_cache": false,
+      "copied_text": "visible_tutor_cycle guides the student to write 3c = b, solve for c, then select the matching choice.",
+      "locator": "visible_tutor_cycle",
+      "why_this_source_counts": "Confirms the live tutor output stays aligned with the saved controller plan."
+    }
+  ],
+  "checked_urls": [
+    {
+      "url": "runtime/answer-first-run/turn-001/03-verified-answer-packet.json",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Checked current verified dossier for substantive claim coverage."
+    },
+    {
+      "url": "runtime/answer-first-run/turn-001/01-controller-answer-packet.json",
+      "status": "LIVE",
+      "subject_match": true,
+      "notes": "Checked saved controller cycle for wording consistency."
+    }
+  ],
+  "proof_dossier_copy": [
+    {
+      "claim_id": "T1",
+      "target_fields": [
+        "message_to_tutor_now",
+        "next_expected_student_reply",
+        "if_on_track"
+      ],
+      "url": "runtime/answer-first-run/turn-001/03-verified-answer-packet.json",
+      "copied_text": "Approved claim A1 shows c = b / 3 and c + 3 = b / 3 + 3, with correct choice E.",
+      "why_this_excerpt_matters": "Covers the substantive answer content referenced by the live tutor message."
+    },
+    {
+      "claim_id": "T4",
+      "target_fields": [
+        "if_confused",
+        "silence_breaker",
+        "current_step"
+      ],
+      "url": "runtime/answer-first-run/turn-001/01-controller-answer-packet.json",
+      "copied_text": "visible_tutor_cycle guides the student to write 3c = b, solve for c, then select the matching choice.",
+      "why_this_excerpt_matters": "Covers the guided step sequence used in the live tutor output."
+    }
+  ],
+  "turn_level_checks": [
+    {
+      "id": "TC1",
+      "purpose": "dossier_coverage",
+      "query": "Compare live tutor output against verified answer packet and controller cycle",
+      "opened_url": "runtime/answer-first-run/turn-001/03-verified-answer-packet.json",
+      "url_status": "LIVE",
+      "finding": "All substantive live fields are covered by the current verified dossier."
+    },
+    {
+      "id": "TC2",
+      "purpose": "subject_sanity",
+      "query": "Ensure live reply remains guided and tied to the current algebra step",
+      "opened_url": "runtime/answer-first-run/turn-001/01-controller-answer-packet.json",
+      "url_status": "LIVE",
+      "finding": "The reply stays guided, brief, and within the verified solution path."
+    }
+  ],
+  "claim_results": [
+    {
+      "id": "T1",
+      "result": "PASS",
+      "reason": "The main live message matches the verified algebra path.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T2",
+      "result": "PASS",
+      "reason": "Expected student reply matches the verified final answer.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T3",
+      "result": "PASS",
+      "reason": "On-track confirmation stays inside the verified result.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T4",
+      "result": "PASS",
+      "reason": "Confusion fallback restates the verified method only.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T5",
+      "result": "PASS",
+      "reason": "Silence breaker asks for the next verified intermediate result.",
+      "approved_for_use": true
+    },
+    {
+      "id": "T6",
+      "result": "PASS",
+      "reason": "Current step matches the verified solution path.",
+      "approved_for_use": true
+    }
+  ],
+  "approved_claim_ids": [
+    "T1",
+    "T2",
+    "T3",
+    "T4",
+    "T5",
+    "T6"
+  ],
+  "blocked_claim_ids": [],
+  "supporting_sources": [
+    {
+      "id": "P1",
+      "title": "Verified answer packet",
+      "url": "runtime/answer-first-run/turn-001/03-verified-answer-packet.json",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "Approved claim A1 shows c = b / 3 and c + 3 = b / 3 + 3, with correct choice E.",
+      "why_it_matters": "Covers the substantive content in the approved live tutor output."
+    },
+    {
+      "id": "P2",
+      "title": "Controller answer packet",
+      "url": "runtime/answer-first-run/turn-001/01-controller-answer-packet.json",
+      "status": "LIVE",
+      "subject_match": true,
+      "copied_text": "visible_tutor_cycle guides the student to write 3c = b, solve for c, then select the matching choice.",
+      "why_it_matters": "Confirms that the live reply remains guided and consistent with the controller plan."
+    }
+  ],
+  "approved_target_fields": {
+    "message_to_tutor_now": true,
+    "next_expected_student_reply": true,
+    "if_on_track": true,
+    "if_confused": true,
+    "silence_breaker": true,
+    "current_step": true
+  },
+  "mismatch_evidence": [],
+  "mismatches": [],
+  "repair_instructions": [],
+  "transcript_verdict": "NONE",
+  "transcript_findings": [],
+  "escalation_recommended": false,
+  "unsupported_claim_ids": [],
+  "conflicts": [],
+  "missing_data": [],
+  "rationale": "The live tutor packet stays guided, brief, and fully covered by the current verified dossier, so no fresh search was required."
+}

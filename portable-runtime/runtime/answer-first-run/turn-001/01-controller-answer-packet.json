@@ -1,0 +1,99 @@
+{
+  "exact_visible_text": "For all real numbers b and c such that the product of c and 3 is b, which of the following expressions represents the sum of c and 3 in terms of b?\n\nA. b + 3\nB. 3b + 3\nC. 3(b + 3)\nD. (b + 3) / 3\nE. b / 3 + 3",
+  "session_mode": "NEW_PROBLEM",
+  "text_input_classification": "REAL_QUESTION",
+  "certainty_score": 99,
+  "search_required": true,
+  "match_status": "LOCAL_BOUND",
+  "question_match_notes": "Single, fully legible multiple-choice algebra question asking for c + 3 in terms of b when 3c = b.",
+  "visible_subparts": [
+    "WHOLE_EXERCISE"
+  ],
+  "active_subpart_status": {
+    "status": "BOUND",
+    "safely_bound_subpart": "WHOLE_EXERCISE"
+  },
+  "ambiguity_reason": "NONE",
+  "artifact_quality": {
+    "status": "clear",
+    "notes": "All prompt text and answer choices are legible in a single screenshot."
+  },
+  "latest_student_line": "NONE",
+  "latest_tutor_line": "NONE",
+  "classroom_transcript_context": {
+    "raw_transcript_text": "NONE",
+    "latest_student_name": "NONE",
+    "latest_student_line": "NONE",
+    "latest_tutor_name": "NONE",
+    "latest_tutor_line": "NONE"
+  },
+  "answer_scope": {
+    "solved_subparts": [
+      "WHOLE_EXERCISE"
+    ],
+    "unsolved_subparts": [],
+    "scope_notes": "The prompt asks for a single equivalent expression, so the full exercise is solved as one unit."
+  },
+  "answer_claims": [
+    {
+      "id": "A1",
+      "subpart": "WHOLE_EXERCISE",
+      "text": "If the product of c and 3 is b, then 3c = b. Dividing both sides by 3 gives c = b / 3, so c + 3 = b / 3 + 3. The correct choice is E.",
+      "target_fields": [
+        "answer_claims[id=A1].text",
+        "solved_answers[subpart=WHOLE_EXERCISE].final_answer",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]"
+      ]
+    }
+  ],
+  "solved_answers": [
+    {
+      "subpart": "WHOLE_EXERCISE",
+      "final_answer": "E. b / 3 + 3",
+      "equivalent_expression": "b / 3 + 3",
+      "reasoning_steps": [
+        "Translate the statement as 3c = b.",
+        "Divide both sides by 3 to isolate c, giving c = b / 3.",
+        "Add 3 to get c + 3 = b / 3 + 3.",
+        "Match the resulting expression to choice E."
+      ]
+    }
+  ],
+  "controller_supporting_sources": [
+    {
+      "id": "C1",
+      "title": "1.1 Solving One-Step Linear Equations | Elementary Algebra",
+      "url": "https://courses.lumenlearning.com/slcc-elementaryalgebra/chapter/1-1-solving-one-step-linear-equations/",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "copied_text": "Divide both sides of the equation by 3 to isolate the variable.",
+      "locator": "turn1view0 lines 152-158",
+      "why_this_source_matters": "Supports the step from 3c = b to c = b / 3."
+    },
+    {
+      "id": "C2",
+      "title": "4.7 Solve Equations with Fractions - Prealgebra | OpenStax",
+      "url": "https://openstax.org/books/prealgebra/pages/4-7-solve-equations-with-fractions",
+      "opened_live": true,
+      "url_status": "LIVE",
+      "copied_text": "When you add or divide the same quantity from both sides of an equation, you still have equality.",
+      "locator": "turn3view0 lines 117-118",
+      "why_this_source_matters": "Confirms that isolating c by division and then expressing the resulting sum preserves equality."
+    }
+  ],
+  "visible_tutor_cycle": {
+    "message_to_tutor_now": "Start by turning the sentence into an equation: 3c = b. Then divide by 3 to get c = b / 3. Now add 3. Which choice matches b / 3 + 3?",
+    "next_expected_student_reply": "E or b / 3 + 3",
+    "if_on_track": "Yes, exactly. Since c = b / 3, the sum c + 3 is b / 3 + 3, so the correct choice is E.",
+    "if_confused": "Rewrite the condition first: product of c and 3 means 3c. Once you have 3c = b, divide by 3 before adding 3.",
+    "silence_breaker": "What do you get for c when 3c = b?",
+    "current_step": "Translate the sentence into an equation and isolate c.",
+    "supporting_claim_ids": [
+      "A1"
+    ]
+  },
+  "blocking_gaps": []
+}

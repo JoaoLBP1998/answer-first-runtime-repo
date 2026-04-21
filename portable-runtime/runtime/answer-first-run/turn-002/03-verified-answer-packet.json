@@ -1,0 +1,42 @@
+{
+  "status": "READY",
+  "approved_claim_ids": [
+    "A1"
+  ],
+  "approved_answer_fields": [
+    "answer_claims[id=A1].text",
+    "solved_answers[subpart=WHOLE_EXERCISE].final_answer",
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]",
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]",
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+    "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]"
+  ],
+  "verified_source_ids": [
+    "S1",
+    "S2"
+  ],
+  "proof_dossier_copy": [
+    {
+      "claim_id": "A1",
+      "target_fields": [
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[0]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[1]"
+      ],
+      "url": "https://openstax.org/books/college-algebra-2e/pages/2-2-linear-equations-in-one-variable",
+      "copied_text": "Apply the distributive property as needed and isolate the variable on one side of the equation.",
+      "why_this_excerpt_matters": "Supports rewriting 3(x + 1) as 3x + 3 and setting up the isolation steps."
+    },
+    {
+      "claim_id": "A1",
+      "target_fields": [
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[2]",
+        "solved_answers[subpart=WHOLE_EXERCISE].reasoning_steps[3]",
+        "solved_answers[subpart=WHOLE_EXERCISE].final_answer"
+      ],
+      "url": "https://math.libretexts.org/Courses/SUNY_Geneseo/Math_113%3A_Finite_Math_for_Society/02%3A_Linear_Equations/2.01%3A_Linear_Equations",
+      "copied_text": "Notice the first step is distributing, then it is solved like any other two-step equation.",
+      "why_this_excerpt_matters": "Supports the rest of the solution path to x = 4."
+    }
+  ],
+  "risk_flags": []
+}

@@ -1,0 +1,12 @@
+{
+  "input_type": "text_question",
+  "exact_user_input": "Solve for x: 3(x + 1) = 15",
+  "student_text": "Solve for x: 3(x + 1) = 15",
+  "latest_student_line": "Solve for x: 3(x + 1) = 15",
+  "latest_tutor_line": "NONE",
+  "new_artifact_summary": "english_text_only_linear_equation",
+  "new_constraints": [
+    "english_test"
+  ],
+  "urgency_note": "NONE"
+}

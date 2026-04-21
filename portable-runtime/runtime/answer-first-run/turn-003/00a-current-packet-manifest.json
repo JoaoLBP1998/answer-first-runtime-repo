@@ -1,0 +1,13 @@
+{
+  "stage": "turn_input_saved",
+  "allowed_packets": [
+    {
+      "role": "turn_input",
+      "path": "C:\\Users\\jlbp_cesar\\Downloads\\JoaoLBP\\_exports\\answer-first-project-2026-04-21\\portable-runtime\\runtime\\answer-first-run\\turn-003\\00-turn-input.json",
+      "sha256": "PENDING",
+      "allowed_as_evidence": true
+    }
+  ],
+  "repair_history_only_packets": [],
+  "clean_audit_mode": true
+}

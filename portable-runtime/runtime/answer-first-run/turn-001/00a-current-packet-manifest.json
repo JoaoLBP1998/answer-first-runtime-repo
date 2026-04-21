@@ -1,0 +1,25 @@
+{
+  "stage": "cleanup_complete",
+  "allowed_packets": [
+    {
+      "role": "verified_answer_packet",
+      "path": "runtime/answer-first-run/turn-001/03-verified-answer-packet.json",
+      "sha256": "8B0F4A718B18715D99D1A2D61A80BD22963F101EBDB97BB6F711625A9C1BB8F6",
+      "allowed_as_evidence": true
+    },
+    {
+      "role": "live_tutor_output",
+      "path": "runtime/answer-first-run/turn-001/04-live-tutor-output.json",
+      "sha256": "80A7AE6C6BB8FD2DCEE3DD37256A62DB02ED34B7B34F9A72266015FEFB2C9C85",
+      "allowed_as_evidence": true
+    },
+    {
+      "role": "verifier1_turn_output",
+      "path": "runtime/answer-first-run/turn-001/05-verifier1-turn-verification.json",
+      "sha256": "DEB43DF50B6A23B343A154C289F69AEBA1C259954F27A44F3A4E5AFB8BB22E82",
+      "allowed_as_evidence": true
+    }
+  ],
+  "repair_history_only_packets": [],
+  "clean_audit_mode": true
+}

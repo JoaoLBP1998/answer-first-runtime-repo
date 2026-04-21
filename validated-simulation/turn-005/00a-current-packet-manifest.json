@@ -1,0 +1,25 @@
+{
+  "stage": "approved_boundary",
+  "allowed_packets": [
+    {
+      "role": "verified_answer_packet",
+      "path": "runtime/answer-first-run/turn-005/03-verified-answer-packet.json",
+      "sha256": "4950dcf943bd93da24385f0d8e1519e98a745707406be708d56b848860eb810e",
+      "allowed_as_evidence": true
+    },
+    {
+      "role": "live_tutor_output",
+      "path": "runtime/answer-first-run/turn-005/04-live-tutor-output.json",
+      "sha256": "7f634e0b8fed455012de0572b9522ee36f3fda932dbe6df37f129bf4d6af89b0",
+      "allowed_as_evidence": true
+    },
+    {
+      "role": "verifier1_turn_output",
+      "path": "runtime/answer-first-run/turn-005/05-verifier1-turn-verification.json",
+      "sha256": "d443214463a4e9a9367bcdacfd6dff4e6a6c90dba380c4d6f93f0880546edb6c",
+      "allowed_as_evidence": true
+    }
+  ],
+  "repair_history_only_packets": [],
+  "clean_audit_mode": true
+}
