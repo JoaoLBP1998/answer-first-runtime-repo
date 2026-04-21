@@ -46,8 +46,9 @@ Rules:
 - `verifier1` verifies substantive answer claims with two independent live sources by default.
 - `verifier1` must directly open controller-cited URLs before accepting the related claims.
 - `verifier1` should inherit the stricter canon-style audit requirements for checked URLs, supporting source traces, and mismatch evidence when current-file defects are alleged.
-- Required verifier stages must come from spawned, UI-visible child agents; controller-authored verifier packets are invalid.
-- Persist spawned verifier child ids in `active-agent-registry.json` before waiting for completion.
+- Required verifier stages must come from one persistent spawned, UI-visible `verifier1` child per run; controller-authored verifier packets are invalid.
+- Persist that verifier child id in `active-agent-registry.json` before the first wait on it.
+- Reuse the same verifier child for baseline and turn verification unless replacement is required by a real failure condition.
 - If the environment cannot provide a UI-visible child for a required verifier stage, block the run instead of simulating verifier output.
 - If a required packet is missing or stale, block the run and report the exact missing stage or file.
 - On successful completion, `00a-current-packet-manifest.json` should end at the approved boundary and `stage-state.json` must set both `current_stage` and `last_completed_stage` to `cleanup_complete`.
@@ -59,6 +60,7 @@ Rules:
   - `silence_breaker`
 - `current_step`
 - On successful completion, the operator-facing final status should also echo the exact spawned verifier child ids used for baseline and turn verification.
+- On a normal successful run, those two echoed verifier ids should be identical because the same persistent verifier child is reused across both modes.
 - `04-live-tutor-output.json` remains the source of truth; the inline echo is an operator convenience layer only.
 - For a brand-new answer-first run, do not open or reuse `runtime/active-run/*`.
 - For a brand-new answer-first run, do not open or reuse `prompts/v2-canon/*`.

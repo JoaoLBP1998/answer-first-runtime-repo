@@ -17,8 +17,12 @@ DURABLE RULES
 - For this variant, do not use old active-run turns as format references.
 - Required verifier stages must be executed by spawned child agents that are visible and inspectable in the UI.
 - Controller-authored, synthetic, or locally fabricated verifier packets are invalid.
-- Record each spawned verifier child id in `active-agent-registry.json` before waiting on it.
-- If a UI-visible child cannot be spawned for a required verifier stage, block the run instead of simulating verification.
+- Spawn exactly one persistent `verifier1` child per run.
+- Record that persistent verifier child id in `active-agent-registry.json` before the first wait on it.
+- Reuse that same child for both `BASELINE_ANSWER_VERIFICATION` and `TURN_CONSISTENCY_CHECK`.
+- Do not spawn a second verifier child just because the mode changes.
+- Spawn a replacement verifier child only if the current verifier child fails, returns `WRONG_ROLE_OUTPUT`, is corrupted, or the user explicitly requests replacement.
+- If a UI-visible persistent verifier child cannot be spawned for a required verifier stage, block the run instead of simulating verification.
 
 CLASSROOM SESSION INPUT RULES
 - During an active answer-first tutoring session, copied classroom transcript text is continuation input by default.
@@ -83,11 +87,11 @@ EXACT STAGE-TO-PROMPT BINDINGS
 - Stage `verifier1_baseline_saved` may be produced only by:
   - `03 VERIFIER1 - adversarial falsifier v2.txt`
   - `MODE = BASELINE_ANSWER_VERIFICATION`
-  - a spawned, UI-visible child agent
+  - the run's persistent, spawned, UI-visible `verifier1` child
 - Stage `verifier1_turn_saved` may be produced only by:
   - `03 VERIFIER1 - adversarial falsifier v2.txt`
   - `MODE = TURN_CONSISTENCY_CHECK`
-  - a spawned, UI-visible child agent
+  - the same persistent, spawned, UI-visible `verifier1` child unless replacement was required by a real failure condition
 - Expected verifier output family:
   - proof packet with root fields such as:
     - `mode`
@@ -111,7 +115,7 @@ WRONG-ROLE OUTPUT GUARD
   - do not advance `RUNTIME_STAGE_STATE`
   - mark the attempt as `WRONG_ROLE_OUTPUT`
   - close that child
-  - respawn the same stage with the exact correct prompt file and exact required mode
+  - respawn a replacement verifier child only for the same stage with the exact correct prompt file and exact required mode
 
 SOURCE POLICY DEFAULT
 - Two independent directly opened sources are the default for every substantive answer or method claim.
@@ -159,8 +163,9 @@ STEP SEQUENCE
 10. Build `CURRENT_PACKET_MANIFEST` for baseline verification:
    - allowed packet evidence = turn input + controller answer packet
    - repair history only packets must stay excluded from evidentiary use
-11. Send the saved controller answer packet to `verifier1` in `BASELINE_ANSWER_VERIFICATION` mode.
-11A. Record the spawned baseline verifier child id in `active-agent-registry.json` before waiting.
+11. If no persistent verifier child exists yet, spawn one UI-visible `verifier1` child for the run.
+11A. Record that persistent verifier child id in `active-agent-registry.json` before the first wait on it.
+11B. Send the saved controller answer packet to that same `verifier1` child in `BASELINE_ANSWER_VERIFICATION` mode.
 12. Save and relay the raw baseline verifier packet as `02-verifier1-baseline-verification.json`.
 13. Before accepting the baseline verifier packet, run controller proof lint:
    - reject any substantive approved claim supported by fewer than 2 independent live sources unless the claim is dossier-covered with `required_source_count = 0`
@@ -185,8 +190,8 @@ STEP SEQUENCE
 16A. When the turn is a classroom transcript continuation, build `LIVE_TUTOR_OUTPUT` as the next directly sendable tutor reply to the parsed latest student line.
 16B. `LIVE_TUTOR_OUTPUT` must follow the live tutor style rules.
 17. Save and relay `LIVE_TUTOR_OUTPUT`.
-18. Send `LIVE_TUTOR_OUTPUT` plus `VERIFIED_ANSWER_PACKET` to `verifier1` in `TURN_CONSISTENCY_CHECK` mode.
-18A. Record the spawned turn verifier child id in `active-agent-registry.json` before waiting.
+18. Reuse the same persistent `verifier1` child and send `LIVE_TUTOR_OUTPUT` plus `VERIFIED_ANSWER_PACKET` to it in `TURN_CONSISTENCY_CHECK` mode.
+18A. Do not spawn a second verifier child here unless replacement was required by a real failure condition.
 19. Save and relay the raw turn verifier packet as `05-verifier1-turn-verification.json`.
 20. If the turn verifier returns `PASS`:
    - mark `LIVE_TUTOR_OUTPUT` as `APPROVED`
@@ -246,3 +251,5 @@ Return JSON only:
     "accepted_source_ids": ["..."]
   }
 }
+
+For a normal successful run, `baseline_verifier_agent_id` and `turn_verifier_agent_id` should be identical because the same persistent `verifier1` child is reused across both modes.

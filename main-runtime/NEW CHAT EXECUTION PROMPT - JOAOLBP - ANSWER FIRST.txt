@@ -31,7 +31,7 @@ Live runtime shape:
 - controller = OCR binder + full answer packet + controller-side web search + packet transport + live tutor output + cleanup
 - verifier1 = adversarial falsifier + baseline answer verifier + turn verifier + transcript auditor
 
-Exact child stage bindings:
+Persistent verifier stage bindings:
 - Controller stage:
   - output family = controller answer packet
   - expected root fields include:
@@ -40,13 +40,11 @@ Exact child stage bindings:
     - `solved_answers`
     - `controller_supporting_sources`
     - `visible_tutor_cycle`
-- Stage 1 child:
+- Persistent `verifier1` child:
   - prompt file = `backup 1.0/project_snapshot/JoaoLBP/usable prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt`
-  - mode = `BASELINE_ANSWER_VERIFICATION`
-  - expected output family = verifier/proof packet
-- Stage 2 child:
-  - prompt file = `backup 1.0/project_snapshot/JoaoLBP/usable prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt`
-  - mode = `TURN_CONSISTENCY_CHECK`
+  - modes used in-sequence:
+    - `BASELINE_ANSWER_VERIFICATION`
+    - `TURN_CONSISTENCY_CHECK`
   - expected output family = verifier/proof packet
 
 Wrong-role guard:
@@ -71,11 +69,16 @@ Current canonical rules that matter:
 - verifier1 must directly open controller-cited URLs before accepting the related claims
 
 UI-visible child rule:
-- `verifier1` baseline verification must be run by a spawned child agent that is visible and inspectable in the UI.
-- `verifier1` turn verification must be run by a spawned child agent that is visible and inspectable in the UI.
+- Spawn exactly one persistent `verifier1` child agent per run.
+- That `verifier1` child must be visible and inspectable in the UI.
+- Reuse that same child for:
+  - `BASELINE_ANSWER_VERIFICATION`
+  - `TURN_CONSISTENCY_CHECK`
 - Controller-authored, synthetic, or locally fabricated verifier packets are invalid.
-- Record each spawned verifier child id in `active-agent-registry.json` before waiting on it.
-- If a UI-visible child cannot be spawned for a required verifier stage, return `BLOCKED` instead of simulating verification.
+- Record the persistent verifier child id in `active-agent-registry.json` before the first wait on it.
+- Do not spawn a second verifier child just because the mode changes.
+- Spawn a replacement verifier child only if the current verifier child fails, returns `WRONG_ROLE_OUTPUT`, is corrupted, or the user explicitly requests replacement.
+- If a required verifier stage cannot be run by a UI-visible persistent child, return `BLOCKED` instead of simulating verification.
 
 Session continuation rule:
 - Once an answer-first tutoring session is open for a problem, copied classroom transcript blocks continue that same problem by default.
@@ -102,12 +105,12 @@ If this is a brand-new answer-first run:
 2. Save exact turn input first
 3. Let the controller solve and search directly
 4. Save `01-controller-answer-packet.json`
-5. Run verifier1 baseline verification using only `backup 1.0/project_snapshot/JoaoLBP/usable prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt` with `MODE = BASELINE_ANSWER_VERIFICATION`
-6. Save and close it
+5. Spawn one persistent UI-visible `verifier1` child and record it before waiting
+6. Run that same `verifier1` child in `MODE = BASELINE_ANSWER_VERIFICATION`
 7. Build `03-verified-answer-packet.json`
 8. Build `04-live-tutor-output.json`
-9. Run verifier1 turn verification using only `backup 1.0/project_snapshot/JoaoLBP/usable prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt` with `MODE = TURN_CONSISTENCY_CHECK`
-10. Save, close, and cleanup
+9. Reuse that same `verifier1` child in `MODE = TURN_CONSISTENCY_CHECK`
+10. Close it during cleanup
 
 If this is same-problem classroom transcript continuation:
 1. Create the next `runtime/answer-first-run/turn-XXX/`
@@ -115,11 +118,12 @@ If this is same-problem classroom transcript continuation:
 3. Read only the latest approved or incomplete answer-first turn needed for same-problem reuse
 4. Reuse the latest verified answer packet and proof dossier only as controller build context
 5. Save a fresh `01-controller-answer-packet.json`
-6. Run verifier1 baseline verification if the continuation introduces a new, contradicted, or uncovered substantive claim
-7. Save `03-verified-answer-packet.json`
-8. Build a fresh `04-live-tutor-output.json` as the next directly sendable tutor reply
-9. Run verifier1 turn verification
-10. Save, close, and cleanup
+6. Spawn one persistent UI-visible `verifier1` child and record it before waiting
+7. Run that same `verifier1` child in baseline mode if the continuation introduces a new, contradicted, or uncovered substantive claim
+8. Save `03-verified-answer-packet.json`
+9. Build a fresh `04-live-tutor-output.json` as the next directly sendable tutor reply
+10. Reuse that same `verifier1` child for turn verification
+11. Save, close it during cleanup, and cleanup
 
 If resuming a saved answer-first run:
 1. Read `stage-state.json`
@@ -145,9 +149,10 @@ Operator output rule:
   - `if_on_track`
   - `if_confused`
   - `silence_breaker`
-- `current_step`
+  - `current_step`
 - Also echo the exact spawned verifier child ids used for:
   - baseline verification
   - turn verification
+- Under normal operation those two echoed ids must be identical because the same persistent `verifier1` child is reused across both modes.
 - Copy those values from the saved `04-live-tutor-output.json`; do not fabricate them from memory.
 - If the run is blocked, rejected, or not yet approved, do not present a send-now tutor message as approved.

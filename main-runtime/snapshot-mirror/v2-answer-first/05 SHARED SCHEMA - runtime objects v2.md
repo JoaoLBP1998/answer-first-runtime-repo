@@ -229,6 +229,7 @@ For a completed approved run, the final manifest should normally expose `verifie
     {
       "agent_role": "verifier1 | backup_agent",
       "agent_id": "string",
+      "modes_run": [],
       "model": "string",
       "reasoning_effort": "xhigh | high | medium | low | minimal | none",
       "is_backup": false,
@@ -244,6 +245,8 @@ For a completed approved run, the final manifest should normally expose `verifie
 
 Persist this object in the exact file `active-agent-registry.json`.
 Prefixed variants such as `00c-active-agent-registry.json` are invalid for this runtime.
+
+The same persistent `verifier1` child should normally cover both baseline and turn verification in a successful run.
 
 ## FINAL_CLEANUP_REPORT
 
@@ -328,6 +331,7 @@ For turn verification these paths should point into the 6 `LIVE_TUTOR_OUTPUT` fi
 - `supporting_sources` must be non-empty for approved or blocked substantive claims.
 - If a verdict alleges a current-file defect, `mismatch_evidence` is required.
 - Prior audits, superseded proof bundles, and repair history are instruction-only context, not evidentiary support.
+- Under normal operation, the source of truth for `baseline_verifier_agent_id` and `turn_verifier_agent_id` should point to the same persistent verifier child id in `active-agent-registry.json`.
 
 ## REPAIR LOOP RULE
 

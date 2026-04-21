@@ -17,6 +17,8 @@ This is the operating sequence for the answer-first runtime variant.
   - `runtime/answer-first-run/turn-XXX/`
 - Save the exact packet before each handoff step.
 - `verifier1` should receive the exact current packet, not inferred thread state.
+- Required verifier stages must be executed by one persistent spawned child agent that is visible and inspectable in the UI.
+- Controller-authored or synthetic verifier packets are invalid.
 - Minimum turn files:
   - `00-turn-input.json`
   - `00a-current-packet-manifest.json`
@@ -47,9 +49,10 @@ This is the operating sequence for the answer-first runtime variant.
 2. Verifier1 baseline pass
    - Prompt: `03 VERIFIER1 - adversarial falsifier v2.txt`
    - Mode: `BASELINE_ANSWER_VERIFICATION`
-   - Input: saved controller answer packet
-   - Output: answer-focused proof bundle
-   - Rule: falsify controller claims and open controller URLs directly
+  - Input: saved controller answer packet
+  - Output: answer-focused proof bundle
+  - Rule: run this stage through the run's single persistent, UI-visible `verifier1` child and record its id in `active-agent-registry.json` before the first wait
+  - Rule: falsify controller claims and open controller URLs directly
    - Rule: keep the search agent behavior intact; search remains live and adversarial
    - Rule: approved support must expose `checked_urls` and `supporting_sources`
    - Rule: a current-file defect verdict must include `mismatch_evidence`
@@ -58,13 +61,23 @@ This is the operating sequence for the answer-first runtime variant.
    - Source: `visible_tutor_cycle` inside the saved controller answer packet
    - Saved file: `04-live-tutor-output.json`
    - Rule: for classroom continuation, this is the next directly sendable tutor reply to the latest student line
+   - Rule: once the live tutor output is approved, echo these exact saved fields inline in the operator-facing status:
+     - `message_to_tutor_now`
+     - `next_expected_student_reply`
+     - `if_on_track`
+     - `if_confused`
+     - `silence_breaker`
+     - `current_step`
+   - Rule: the inline echo is copied from `04-live-tutor-output.json`; the file remains the source of truth
 
 4. Verifier1 turn pass
-   - Prompt: `03 VERIFIER1 - adversarial falsifier v2.txt`
-   - Mode: `TURN_CONSISTENCY_CHECK`
-   - Input: `LIVE_TUTOR_OUTPUT` + `VERIFIED_ANSWER_PACKET`
-   - Output: final approval or rejection of the one visible send cycle
-   - Rule: confirm the reply stays tied to the parsed latest student line and does not jump to a full answer unless the verified answer packet supports a close step
+  - Prompt: `03 VERIFIER1 - adversarial falsifier v2.txt`
+  - Mode: `TURN_CONSISTENCY_CHECK`
+  - Input: `LIVE_TUTOR_OUTPUT` + `VERIFIED_ANSWER_PACKET`
+  - Output: final approval or rejection of the one visible send cycle
+  - Rule: reuse the same persistent, UI-visible `verifier1` child here; do not spawn a second verifier child just because the mode changes
+  - Rule: do at least one fresh adversarial live retrieval during turn verification even when the live-send content appears dossier-covered
+  - Rule: confirm the reply stays tied to the parsed latest student line and does not jump to a full answer unless the verified answer packet supports a close step
 
 5. Cleanup
    - Close every tracked child agent
@@ -93,3 +106,6 @@ This is the operating sequence for the answer-first runtime variant.
 - Every run ends with explicit cleanup.
 - Verify close by exact agent id.
 - Report any lingering agent ids exactly.
+- For approved runs, include the inline echo of the saved live tutor fields in the final operator-facing status.
+- For approved runs, also include the exact baseline and turn verifier child ids in the final operator-facing status.
+- For approved runs, those two ids should normally be identical because the same persistent `verifier1` child is reused across both modes.
