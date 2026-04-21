@@ -70,6 +70,13 @@ Current canonical rules that matter:
 - controller-side web search is allowed while building `01-controller-answer-packet.json`
 - verifier1 must directly open controller-cited URLs before accepting the related claims
 
+UI-visible child rule:
+- `verifier1` baseline verification must be run by a spawned child agent that is visible and inspectable in the UI.
+- `verifier1` turn verification must be run by a spawned child agent that is visible and inspectable in the UI.
+- Controller-authored, synthetic, or locally fabricated verifier packets are invalid.
+- Record each spawned verifier child id in `active-agent-registry.json` before waiting on it.
+- If a UI-visible child cannot be spawned for a required verifier stage, return `BLOCKED` instead of simulating verification.
+
 Session continuation rule:
 - Once an answer-first tutoring session is open for a problem, copied classroom transcript blocks continue that same problem by default.
 - Expected continuation format is repeated speaker / timestamp / message blocks such as:
@@ -138,6 +145,9 @@ Operator output rule:
   - `if_on_track`
   - `if_confused`
   - `silence_breaker`
-  - `current_step`
+- `current_step`
+- Also echo the exact spawned verifier child ids used for:
+  - baseline verification
+  - turn verification
 - Copy those values from the saved `04-live-tutor-output.json`; do not fabricate them from memory.
 - If the run is blocked, rejected, or not yet approved, do not present a send-now tutor message as approved.
