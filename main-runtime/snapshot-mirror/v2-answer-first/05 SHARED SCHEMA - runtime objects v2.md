@@ -1,4 +1,4 @@
-# Shared Runtime Objects V2 - Controller Search + Verifier1
+# Shared Runtime Objects V2 - Minimal File Surface
 
 Use these objects across the controller and `verifier1`.
 
@@ -25,14 +25,15 @@ If wording conflicts with packet structure, preserve packet structure.
 
 ```json
 {
-  "default_required_source_count": 2,
+  "baseline_default_required_source_count": 2,
   "conflict_or_independence_escalation_count": 3,
-  "dossier_covered_required_source_count": 0
+  "turn_consistency_minimum_fresh_live_retrieval_count": 1
 }
 ```
 
-Two independent directly opened live sources are the default for substantive answer or method claims.
-Packet evidence is context, not enough by itself for substantive answer claim approval.
+Two independent directly opened live sources are the default for substantive answer or method claims during baseline verification.
+Turn consistency checking still requires at least one fresh adversarial live retrieval even when the current verified dossier appears sufficient.
+Packet evidence is context, not enough by itself for new substantive answer claim approval.
 
 ## CONTROLLER_OCR_CHECK
 
@@ -51,9 +52,14 @@ Packet evidence is context, not enough by itself for substantive answer claim ap
 {
   "exact_visible_text": "string",
   "session_mode": "NEW_PROBLEM | CLASSROOM_TRANSCRIPT_CONTINUATION | CONTROL_MESSAGE",
-  "text_input_classification": "REAL_QUESTION | TUTORING_TURN | INSUFFICIENT_ARTIFACT",
+  "text_input_classification": "REAL_QUESTION | TUTORING_TURN | CONTROL_INPUT | INSUFFICIENT_ARTIFACT",
   "certainty_score": 0,
-  "search_required": true | false,
+  "claim_delta_status": "NEW_PROBLEM | NEW_SUBSTANTIVE_CLAIM | NO_NEW_SUBSTANTIVE_CLAIMS | CONTRADICTION | CONTROL_ONLY",
+  "baseline_verification_required": true,
+  "search_required": true,
+  "search_scope": "EXACT_MATCH | EQUIVALENT_MATCH | METHOD_ONLY | NONE_REUSED_BOUNDARY | NONE_CONTROL_ONLY",
+  "search_skip_reason": "NOT_SKIPPED | NO_NEW_SUBSTANTIVE_CLAIMS_LEGAL_REUSE | CONTROL_ONLY_NO_SUBSTANTIVE_CLAIM | NONE",
+  "search_decision_basis": "string",
   "match_status": "LOCAL_BOUND | SEARCH_BOUND | LOCAL_AMBIGUOUS | INSUFFICIENT_ARTIFACT",
   "question_match_notes": "string",
   "visible_subparts": [],
@@ -62,7 +68,6 @@ Packet evidence is context, not enough by itself for substantive answer claim ap
     "safely_bound_subpart": "string or NONE"
   },
   "ambiguity_reason": "string or NONE",
-  "artifact_quality": {},
   "latest_student_line": "string or NONE",
   "latest_tutor_line": "string or NONE",
   "classroom_transcript_context": {
@@ -104,17 +109,32 @@ Packet evidence is context, not enough by itself for substantive answer claim ap
 }
 ```
 
-`certainty_score` must be an integer from 0 to 100, not a 0-1 float.
-
-`candidate_interaction_tree`, `draft_normal_output`, `cycle_2`, and pedagogical claim typing are not part of this variant.
-`session_mode = CLASSROOM_TRANSCRIPT_CONTINUATION` means `latest_student_line` must be actionable for the current turn.
-`session_mode = CONTROL_MESSAGE` means plain operator language must not be stored as a student-authored classroom line.
+Rules:
+- `certainty_score` must be an integer from 0 to 100
+- `claim_delta_status` governs whether baseline verification is required on continuation turns
+- `claim_delta_status = NEW_PROBLEM | NEW_SUBSTANTIVE_CLAIM | CONTRADICTION` requires `search_required = true`, `search_skip_reason = NOT_SKIPPED`, and `search_scope != NONE_REUSED_BOUNDARY | NONE_CONTROL_ONLY`
+- `claim_delta_status = NO_NEW_SUBSTANTIVE_CLAIMS` allows `search_required = false` only when legal reuse conditions are satisfied and no invalidation trigger fires
+- `claim_delta_status = CONTROL_ONLY` requires `search_required = false`, `search_scope = NONE_CONTROL_ONLY`, and `search_skip_reason = CONTROL_ONLY_NO_SUBSTANTIVE_CLAIM`
+- when `search_required = false`, `search_decision_basis` must explain the legal reuse or control-only basis explicitly
+- `session_mode = CLASSROOM_TRANSCRIPT_CONTINUATION` means `latest_student_line` must be actionable for the current turn
+- `session_mode = CONTROL_MESSAGE` means plain operator language must not be stored as a student-authored classroom line
 
 ## VERIFIED_ANSWER_PACKET
 
 ```json
 {
   "status": "READY | PARTIAL | BLOCKED",
+  "active_problem": "string",
+  "active_problem_fingerprint": "string",
+  "reuse_mode": "FRESH_BASELINE_PASS | REUSED_PRIOR_APPROVED_BOUNDARY",
+  "reuse_basis": {
+    "turn_path": "string or NONE",
+    "verified_answer_packet_path": "string or NONE",
+    "turn_verifier_packet_path": "string or NONE",
+    "verified_answer_sha256": "string or NONE",
+    "turn_verifier_sha256": "string or NONE",
+    "reuse_reason": "string or NONE"
+  },
   "approved_claim_ids": [],
   "approved_answer_fields": [],
   "verified_source_ids": [],
@@ -123,118 +143,89 @@ Packet evidence is context, not enough by itself for substantive answer claim ap
 }
 ```
 
-## SESSION_STATE
+## TURN_STATE
 
-```json
-{
-  "active_problem": "string",
-  "active_target": "string",
-  "session_status": "OPEN | CLOSED",
-  "current_stage": "string",
-  "problem_anchor": "exact text | OCR | screenshot + chat",
-  "trigger_legend_shown": false,
-  "verified_claim_cache": [],
-  "accepted_source_cache": [],
-  "policy_flags": {
-    "assessment_risk": false,
-    "artifact_ambiguity": false,
-    "time_pressure": false
-  }
-}
-```
-
-## RUNTIME_STAGE_STATE
+This object replaces separate manifest, stage-state, repair-ticket, and final-cleanup files.
+Persist it in the exact file `turn-state.json`.
 
 ```json
 {
   "run_id": "string",
   "turn_id": "string",
-  "current_stage": "turn_input_saved | controller_answer_saved | verifier1_baseline_saved | verified_answer_saved | live_tutor_saved | verifier1_turn_saved | approved | blocked | cleanup_complete",
-  "thread_state_reliable": true,
+  "route": "NEW_PROBLEM | SAME_PROBLEM_CONTINUATION | CONTROL_MESSAGE | REPAIR",
+  "active_problem": "string or NONE",
+  "active_problem_fingerprint": "string or NONE",
+  "claim_delta_status": "NEW_PROBLEM | NEW_SUBSTANTIVE_CLAIM | NO_NEW_SUBSTANTIVE_CLAIMS | CONTRADICTION | CONTROL_ONLY",
+  "baseline_verification_required": true,
+  "current_stage": "turn_input_saved | controller_answer_saved | verifier1_baseline_saved | verified_answer_saved | live_tutor_saved | verifier1_turn_saved | control_handled | blocked | cleanup_complete",
   "last_completed_stage": "string",
-  "blocked_on_stage": "string or NONE"
-}
-```
-
-When cleanup completes, both `current_stage` and `last_completed_stage` must be `cleanup_complete`.
-
-## TURN_PACKET_PATHS
-
-```json
-{
-  "turn_root": "runtime/answer-first-run/turn-XXX",
-  "turn_input": "string or NONE",
-  "current_packet_manifest": "string or NONE",
-  "repair_ticket": "string or NONE",
-  "controller_answer_output": "string or NONE",
-  "verifier1_baseline_output": "string or NONE",
-  "verified_answer_packet": "string or NONE",
-  "live_tutor_output": "string or NONE",
-  "verifier1_turn_output": "string or NONE",
-  "final_cleanup_report": "string or NONE"
-}
-```
-
-## CURRENT_PACKET_MANIFEST
-
-```json
-{
-  "stage": "string",
-  "allowed_packets": [
+  "blocked_on_stage": "string or NONE",
+  "child_registry_path": "active-agent-registry.json or NONE",
+  "packet_index": [
     {
       "role": "turn_input | controller_answer_output | verifier1_baseline_output | verified_answer_packet | live_tutor_output | verifier1_turn_output",
       "path": "string",
       "sha256": "string",
+      "authoritative_for_stage": true,
       "allowed_as_evidence": true
     }
   ],
-  "repair_history_only_packets": [
-    {
-      "path": "string",
-      "reason": "prior audit | superseded proof | interaction history"
-    }
+  "approved_boundary": [
+    "03-verified-answer-packet.json",
+    "04-live-tutor-output.json",
+    "05-verifier1-turn-verification.json"
   ],
-  "clean_audit_mode": true
+  "reuse_basis": {
+    "turn_path": "string or NONE",
+    "verified_answer_packet_path": "string or NONE",
+    "turn_verifier_packet_path": "string or NONE",
+    "verified_answer_sha256": "string or NONE",
+    "turn_verifier_sha256": "string or NONE",
+    "reuse_reason": "string or NONE"
+  },
+  "repair": {
+    "owner_role": "controller | verifier1 | NONE",
+    "source_audit_packet": "string or NONE",
+    "repair_items": []
+  },
+  "cleanup": {
+    "required": true,
+    "attempted_agent_ids": [],
+    "closed_agent_ids": [],
+    "not_found_agent_ids": [],
+    "still_open_agent_ids": [],
+    "cleanup_complete": false
+  }
 }
 ```
 
-For a completed approved run, the final manifest should normally expose `verified_answer_packet`, `live_tutor_output`, and `verifier1_turn_output` as the approved evidentiary boundary.
-
-## REPAIR_TICKET
-
-```json
-{
-  "owner_role": "controller | verifier1",
-  "instruction_only": true,
-  "source_audit_packet": "string",
-  "repair_items": [
-    {
-      "claim_id": "string or NONE",
-      "affected_fields": [],
-      "failure_reason": "string",
-      "packet_path": "string or NONE",
-      "field_path": "string or NONE",
-      "quoted_fragment": "string or NONE"
-    }
-  ]
-}
-```
+Rules:
+- update `turn-state.json` only after the referenced packet has been successfully written
+- if a packet hash or path in `packet_index` is wrong, stale, or missing, block the turn
+- do not create separate files for manifest, repair, stage-state, or final cleanup when `turn-state.json` can hold that state
 
 ## ACTIVE_AGENT_REGISTRY
+
+Persist this object in the exact file `active-agent-registry.json` only when at least one verifier child or backup child is spawned.
 
 ```json
 {
   "run_id": "string",
+  "turn_id": "string",
   "tracked_agents": [
     {
       "agent_role": "verifier1 | backup_agent",
-      "agent_id": "string",
       "modes_run": [],
+      "stage": "BASELINE_ANSWER_VERIFICATION | TURN_CONSISTENCY_CHECK | TRANSCRIPT_AUDIT | NONE",
+      "agent_id": "string",
       "model": "string",
       "reasoning_effort": "xhigh | high | medium | low | minimal | none",
+      "ui_visible": true,
+      "registered_before_wait": true,
       "is_backup": false,
       "spawn_order": 0,
-      "status": "RUNNING | COMPLETED | CLOSED | NOT_FOUND | UNKNOWN"
+      "status": "RUNNING | COMPLETED | CLOSED | NOT_FOUND | UNKNOWN",
+      "close_status": "CLOSED | NOT_FOUND | UNKNOWN"
     }
   ],
   "open_agent_ids": [],
@@ -243,23 +234,8 @@ For a completed approved run, the final manifest should normally expose `verifie
 }
 ```
 
-Persist this object in the exact file `active-agent-registry.json`.
-Prefixed variants such as `00c-active-agent-registry.json` are invalid for this runtime.
-
 The same persistent `verifier1` child should normally cover both baseline and turn verification in a successful run.
-
-## FINAL_CLEANUP_REPORT
-
-```json
-{
-  "run_id": "string",
-  "attempted_agent_ids": [],
-  "closed_agent_ids": [],
-  "not_found_agent_ids": [],
-  "still_open_agent_ids": [],
-  "cleanup_complete": true
-}
-```
+For this runtime, the expected persistent `verifier1` settings are `model = gpt-5.4` and `reasoning_effort = xhigh`.
 
 ## LIVE_TUTOR_OUTPUT
 
@@ -271,25 +247,33 @@ The same persistent `verifier1` child should normally cover both baseline and tu
   "if_confused": "string",
   "silence_breaker": "string",
   "current_step": "string",
-  "approval_state": "PROVISIONAL | APPROVED | BLOCKED"
+  "approval_state": "PROVISIONAL | APPROVED | BLOCKED | NONE"
 }
 ```
 
-For classroom transcript continuation, `LIVE_TUTOR_OUTPUT` should be directly sendable tutor wording tied to the latest student line.
-Keep it guided, brief, and warm.
-If the student is right, congratulate briefly before the next step.
-If the student is nearly right, prefer `Quite close.` or `You're almost there.` before the correction or next hint.
+Rules:
+- for classroom transcript continuation, `LIVE_TUTOR_OUTPUT` should be directly sendable tutor wording tied to the latest student line
+- keep it guided, brief, and warm
+- if the student is right, congratulate briefly before the next step
+- if the student is nearly right, prefer `Quite close.` or `You're almost there.` before the correction or next hint
 
-## APPROVED_TARGET_FIELDS
+## SOURCE_RECORD
+
+Use this shape for substantive entries inside `sources` and `supporting_sources`.
 
 ```json
 {
-  "exact.field.path": true | false
+  "source_id": "string",
+  "title": "string",
+  "url": "string",
+  "opened_live": true,
+  "copied_text": "string",
+  "locator": "string or NONE",
+  "independence_group": "string",
+  "independence_status": "INDEPENDENT | SHARED_LINEAGE | DERIVATIVE | UNKNOWN",
+  "independence_reason": "string"
 }
 ```
-
-For baseline verification these paths should point into the answer packet.
-For turn verification these paths should point into the 6 `LIVE_TUTOR_OUTPUT` fields.
 
 ## PROOF_BUNDLE
 
@@ -299,6 +283,8 @@ For turn verification these paths should point into the 6 `LIVE_TUTOR_OUTPUT` fi
   "proof_status": "DONE | INCOMPLETE | FAIL",
   "status": "PASS | INCOMPLETE | FAIL",
   "coverage_status": "ANSWER_READY | ANSWER_PARTIAL | COVERED_BY_DOSSIER | FRESH_SEARCH_REQUIRED | SELF_AUDIT_REPAIR_REQUIRED",
+  "fresh_live_retrieval_performed": false,
+  "fresh_live_source_ids": [],
   "claims": [],
   "sources": [],
   "checked_urls": [],
@@ -308,6 +294,16 @@ For turn verification these paths should point into the 6 `LIVE_TUTOR_OUTPUT` fi
   "approved_claim_ids": [],
   "blocked_claim_ids": [],
   "supporting_sources": [],
+  "independence_audit": [
+    {
+      "claim_id": "string",
+      "required_independent_source_count": 2,
+      "accepted_independent_source_ids": [],
+      "rejected_source_ids": [],
+      "independence_verdict": "SATISFIED | ESCALATED_TO_THIRD_SOURCE | FAILED | NOT_APPLICABLE",
+      "third_source_reason": "string or NONE"
+    }
+  ],
   "approved_target_fields": {},
   "mismatch_evidence": [],
   "mismatches": [],
@@ -325,13 +321,14 @@ For turn verification these paths should point into the 6 `LIVE_TUTOR_OUTPUT` fi
 ## PACKET TRANSPORT RULE
 
 - `verifier1` should receive the exact explicit packet for its current stage.
-- Do not treat thread memory as the authoritative source of the latest controller answer packet, repair ticket, or proof bundle.
+- Do not treat thread memory as the authoritative source of the latest controller answer packet, verified answer packet, or proof bundle.
 - If `verifier1` says the required packet is missing or stale, the controller must resend the exact packet explicitly.
-- `checked_urls` must enumerate every URL or local packet actually checked for the current verdict.
+- `checked_urls` must enumerate every URL actually checked for the current verdict.
 - `supporting_sources` must be non-empty for approved or blocked substantive claims.
+- `independence_audit` must be non-empty for approved or blocked substantive claims.
+- if two accepted sources share lineage, the verifier must either mark independence as failed or explain the third-source escalation explicitly.
 - If a verdict alleges a current-file defect, `mismatch_evidence` is required.
-- Prior audits, superseded proof bundles, and repair history are instruction-only context, not evidentiary support.
-- Under normal operation, the source of truth for `baseline_verifier_agent_id` and `turn_verifier_agent_id` should point to the same persistent verifier child id in `active-agent-registry.json`.
+- Prior audits and superseded proof bundles are instruction-only context, not evidentiary support.
 
 ## REPAIR LOOP RULE
 

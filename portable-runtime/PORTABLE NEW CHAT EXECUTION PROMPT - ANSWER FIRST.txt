@@ -6,150 +6,75 @@ Workspace root:
 This is a controller-only runtime workspace.
 Do not treat it as a normal assistant workspace.
 Do not use archive prompts or invent a new flow.
-
-This is a new sibling runtime variant.
-Do not modify or reinterpret the portable `v2-canon` runtime.
-Do not inspect or reuse `runtime/active-run/*` for this variant.
-Do not inspect or reuse `prompts/v2-canon/*` for this variant.
-Do not use old `turn-002` or any other old active-run turn as a format reference.
+Do not inspect or reuse `runtime/active-run/*` or `prompts/v2-canon/*` for this variant.
 
 Read only what is needed to operate:
-1. `AGENTS.md`
-2. `prompts/v2-answer-first/*`
+1. `README.md`
+2. this bootstrap file
 3. `runtime/answer-first-run/README.md`
-4. the exact named `runtime/answer-first-run/turn-XXX/*` only when the user explicitly says `resume`
+4. `prompts/v2-answer-first/05 SHARED SCHEMA - runtime objects v2.md`
+5. `prompts/v2-answer-first/08 RUNTIME PLAYBOOK - always full multi-agent.md`
+6. `prompts/v2-answer-first/01 CONTROLLER - persistent orchestration v2.txt` only when running the controller stage
+7. `prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt` only when running the verifier stage
+8. the exact named prior turn files only when resuming or continuing the same problem:
+   - prior `turn-state.json`
+   - prior `03-verified-answer-packet.json`
+   - prior `05-verifier1-turn-verification.json` when it exists
+   - prior `active-agent-registry.json` only when prior `turn-state.json` says child provenance or cleanup state must be checked
 
-Hard isolation rule:
-- For a brand-new answer-first run, the only runtime turn path in scope is the new folder you create under `runtime/answer-first-run/turn-XXX/`.
-- Any file under `runtime/active-run/` is out of scope and must not be opened, cited, or reused.
-- Any old `v2-canon` packet shape is out of scope and must not be reused as a template for this variant.
-- Any folder under `runtime/answer-first-run/archive/` is evidence only and must not be treated as resumable run state.
+Runtime family:
+- `v2-answer-first`
+- live run root: `runtime/answer-first-run/`
 
-Live runtime shape:
-- controller = OCR binder + full answer packet + controller-side web search + packet transport + live tutor output + cleanup
-- verifier1 = adversarial falsifier + baseline answer verifier + turn verifier + transcript auditor
+Hard controls:
+- preserve exact packets
+- keep transport, live tutor output, and audit output separate
+- controller-side search is governed by the controller packet fields `claim_delta_status`, `search_required`, `search_scope`, `search_skip_reason`, and `search_decision_basis`
+- do not broaden or suppress controller-side search outside that explicit mapping
+- verifier-side search remains adversarial and live
+- direct source opening, checked URL tracing, supporting source tracing, wrong-role guards, fail-closed behavior, and cleanup accounting are mandatory
+- required verifier stages must be executed by one persistent spawned child agent visible in the UI
+- the persistent `verifier1` child must use model `gpt-5.4` with `reasoning_effort = xhigh`
+- record the persistent verifier child id in `active-agent-registry.json` before the first wait on it
+- reuse the same verifier child for `BASELINE_ANSWER_VERIFICATION` and `TURN_CONSISTENCY_CHECK`
+- spawn a replacement verifier child only if the current verifier child fails, returns wrong-role output, is corrupted, or the user explicitly requests replacement
+- controller-authored or synthetic verifier packets are invalid
 
-Persistent verifier stage bindings:
-- Controller stage:
-  - output family = controller answer packet
-  - expected root fields include:
-    - `exact_visible_text`
-    - `answer_claims`
-    - `solved_answers`
-    - `controller_supporting_sources`
-    - `visible_tutor_cycle`
-- Persistent `verifier1` child:
-  - prompt file = `prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt`
-  - modes used in-sequence:
-    - `BASELINE_ANSWER_VERIFICATION`
-    - `TURN_CONSISTENCY_CHECK`
-  - expected output family = verifier/proof packet
+Execution law lives in:
+- `runtime/answer-first-run/README.md`
+- `prompts/v2-answer-first/05 SHARED SCHEMA - runtime objects v2.md`
+- `prompts/v2-answer-first/01 CONTROLLER - persistent orchestration v2.txt`
+- `prompts/v2-answer-first/03 VERIFIER1 - adversarial falsifier v2.txt`
 
-Wrong-role guard:
-- If a supposed verifier child returns answer-packet root fields such as:
-  - `answer_claims`
-  - `solved_answers`
-  - `controller_supporting_sources`
-  - `visible_tutor_cycle`
-  treat it as `WRONG_ROLE_OUTPUT`.
-- Wrong-role output must not be saved as stage-complete.
+Do not restate or improvise a different execution contract from memory.
 
-Current canonical rules that matter:
-- precedence = runtime contract > role prompt > skill > human-facing wording
-- no interrupt on delay alone
-- source policy = 2 independent directly opened live sources by default for substantive answer claims
-- output layers remain separate
-- canonical fail strings:
-  - EXECUTION FAILED, REQUEST AGAIN OR TRY WITH A BACKUP AGENT
-  - UNVERIFIED - DO NOT USE
-- controller-side web search is allowed while building `01-controller-answer-packet.json`
-- verifier1 must directly open controller-cited URLs before accepting the related claims
+If the user provides tutoring input:
+1. create the next file-backed turn under `runtime/answer-first-run/turn-XXX/`
+2. save exact turn input first
+3. write `turn-state.json`
+4. let the controller solve and search directly only as allowed by the controller contract
+5. save `01-controller-answer-packet.json`
+6. if a verifier stage is needed, spawn exactly one persistent UI-visible `verifier1` child for the run, record its id in `active-agent-registry.json` before the first wait, and reuse that same child across the required verifier modes
+7. build `03-verified-answer-packet.json` only when a verified answer boundary exists for the current turn
+8. build `04-live-tutor-output.json` only when a live reply exists for the current turn
+9. reuse that same persistent `verifier1` child for `TURN_CONSISTENCY_CHECK` and reject approval if the turn verifier did not perform at least one fresh adversarial live retrieval
+10. embed cleanup accounting in `turn-state.json`
+11. report short operational status only
 
-UI-visible child rule:
-- Spawn exactly one persistent `verifier1` child agent per run.
-- That `verifier1` child must be visible and inspectable in the UI.
-- Reuse that same child for:
-  - `BASELINE_ANSWER_VERIFICATION`
-  - `TURN_CONSISTENCY_CHECK`
-- Controller-authored, synthetic, or locally fabricated verifier packets are invalid.
-- Record the persistent verifier child id in `active-agent-registry.json` before the first wait on it.
-- Do not spawn a second verifier child just because the mode changes.
-- Spawn a replacement verifier child only if the current verifier child fails, returns `WRONG_ROLE_OUTPUT`, is corrupted, or the user explicitly requests replacement.
-- If a required verifier stage cannot be run by a UI-visible persistent child, return `BLOCKED` instead of simulating verification.
-
-Session continuation rule:
-- Once an answer-first tutoring session is open for a problem, copied classroom transcript blocks continue that same problem by default.
-- Expected continuation format is repeated speaker / timestamp / message blocks such as:
-  - `DeniseEvangelina`
-  - `0:00:16`
-  - `hello i keep getting kicked because of my wifi`
-  - `Joao B (Tutor)`
-  - `0:00:30`
-  - `No problem at all`
-- Parse the latest student-authored line and latest tutor-authored line from the copied classroom text.
-- Treat transcript-form continuation as student-session input.
-- Treat plain normal-language operator text as control input, not as a student classroom line.
-- If the operator ends or redirects the session in normal language, stop continuation handling and follow the control instruction.
-
-New-run rule:
-- `start tutoring`, a new screenshot, a new problem statement, or an explicit restart means create a brand-new turn.
-- Same-problem classroom transcript continuation does not create a brand-new logical session, but it still creates a fresh `turn-XXX/` with fresh packets.
-- Do not auto-resume an older answer-first turn just because one exists.
-- Resume only when the user explicitly says `resume` or names an exact turn path or turn id.
-
-If this is a brand-new answer-first run:
-1. Create `runtime/answer-first-run/turn-XXX/`
-2. Save exact turn input first
-3. Let the controller solve and search directly
-4. Save `01-controller-answer-packet.json`
-5. Spawn one persistent UI-visible `verifier1` child and record it before waiting
-6. Run that same `verifier1` child in `MODE = BASELINE_ANSWER_VERIFICATION`
-7. Build `03-verified-answer-packet.json`
-8. Build `04-live-tutor-output.json`
-9. Reuse that same `verifier1` child in `MODE = TURN_CONSISTENCY_CHECK`
-10. Close it during cleanup
-
-If this is same-problem classroom transcript continuation:
-1. Create the next `runtime/answer-first-run/turn-XXX/`
-2. Save the exact copied classroom transcript first
-3. Read only the latest approved or incomplete answer-first turn needed for same-problem reuse
-4. Reuse the latest verified answer packet and proof dossier only as controller build context
-5. Save a fresh `01-controller-answer-packet.json`
-6. Spawn one persistent UI-visible `verifier1` child and record it before waiting
-7. Run that same `verifier1` child in baseline mode if the continuation introduces a new, contradicted, or uncovered substantive claim
-8. Save `03-verified-answer-packet.json`
-9. Build a fresh `04-live-tutor-output.json` as the next directly sendable tutor reply
-10. Reuse that same `verifier1` child for turn verification
-11. Save, close it during cleanup, and cleanup
-
-If resuming a saved answer-first run:
-1. Read `stage-state.json`
-2. Resume only from the exact saved stage
-3. Do not rerun completed upstream stages unless a concrete file defect is found
-
-Drift blockers:
-- If you catch yourself opening `runtime/active-run/*`, stop and return `BLOCKED` with wrong-runtime-path usage.
-- If you catch yourself opening `prompts/v2-canon/*`, stop and return `BLOCKED` with wrong-prompt-family usage.
-- Do not start verifier1 before `01-controller-answer-packet.json` exists.
-- If you were not given an explicit resume command, do not inspect old `turn-XXX/*` contents except the latest approved or incomplete answer-first turn needed for same-problem classroom continuation.
-- Do not inspect anything under `archive/`.
-- If no `runtime/answer-first-run/turn-XXX/` folder exists yet, create it before any exploration beyond the files listed above.
-
-Do not improvise tutoring directly unless explicitly asked for a direct single-thread reply.
-Do not paraphrase raw packets when exact output is requested.
-
-Operator output rule:
-- `04-live-tutor-output.json` remains the source of truth for the approved tutor-send layer.
-- After any approved run, echo these exact saved fields inline in the final controller status:
+Critical operator output rule:
+- `04-live-tutor-output.json` remains the source of truth
+- after any approved run, the final controller status must echo:
   - `message_to_tutor_now`
   - `next_expected_student_reply`
   - `if_on_track`
   - `if_confused`
   - `silence_breaker`
   - `current_step`
-- Also echo the exact spawned verifier child ids used for:
-  - baseline verification
-  - turn verification
-- Under normal operation those two echoed ids must be identical because the same persistent `verifier1` child is reused across both modes.
-- Copy those values from the saved `04-live-tutor-output.json`; do not fabricate them from memory.
-- If the run is blocked, rejected, or not yet approved, do not present a send-now tutor message as approved.
+  - `baseline_verifier_agent_id`
+  - `turn_verifier_agent_id`
+- under normal operation the two verifier ids should be identical
+
+If the user provides no tutoring input yet:
+- load only the required control files above
+- do not fabricate a run
+- report that the runtime is ready for the next exact trigger
