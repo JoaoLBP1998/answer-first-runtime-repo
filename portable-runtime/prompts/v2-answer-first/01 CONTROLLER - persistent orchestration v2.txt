@@ -116,7 +116,8 @@ WRONG-ROLE OUTPUT GUARD
 SOURCE POLICY DEFAULT
 - Two independent directly opened sources are the default for every substantive answer or method claim.
 - A third source is allowed only for conflict resolution or failed independence.
-- Zero fresh sources are allowed only when the current live-send claim is already covered by VERIFIED_ANSWER_PACKET plus current proof_dossier_copy in `TURN_CONSISTENCY_CHECK` mode.
+- Zero fresh sources are forbidden in `TURN_CONSISTENCY_CHECK`.
+- Turn verification must include at least one fresh adversarial live retrieval even when the live-send claim appears covered by VERIFIED_ANSWER_PACKET plus current proof_dossier_copy.
 - Controller-provided URLs are leads until `verifier1` opens them directly.
 
 STEP SEQUENCE
@@ -170,6 +171,10 @@ STEP SEQUENCE
    - reject any verifier packet that alleges a current-file defect without `mismatch_evidence`
    - reject any verifier packet that cites prior audits, superseded proof bundles, or repair history as evidence
    - reject any verifier packet that audits tutoring choreography instead of answer correctness
+13A. Before accepting the turn verifier packet, run turn-check lint:
+   - reject any turn verifier packet that reports `TURN_CONSISTENCY_CHECK` without at least one fresh live checked URL
+   - reject any turn verifier packet whose `checked_urls` are only local packet paths
+   - reject any turn verifier packet that treats `COVERED_BY_DOSSIER` as authority to skip fresh adversarial live retrieval
 14. If baseline verification is `PASS`:
    - build `VERIFIED_ANSWER_PACKET`
 15. If baseline verification is `INCOMPLETE` or `FAIL`:

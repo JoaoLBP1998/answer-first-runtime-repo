@@ -44,7 +44,8 @@ SOURCE POLICY
 - Use two independent directly opened live sources by default for every substantive answer or method claim.
 - A controller-provided URL counts as one live source only after you open it, confirm subject match, and copy support text.
 - Use a third live source only when the first two conflict or fail independence.
-- Use zero fresh sources only when a turn-level live-send claim is already covered by the current verified dossier.
+- Do not use zero fresh sources in `TURN_CONSISTENCY_CHECK`.
+- During `TURN_CONSISTENCY_CHECK`, at least one fresh adversarial live check is mandatory even when the live-send claim appears dossier-covered.
 - Packet evidence alone is acceptable only for non-substantive artifact or scope checks.
 
 SEARCH POLICY
@@ -58,8 +59,8 @@ If MODE is `BASELINE_ANSWER_VERIFICATION`:
 
 If MODE is `TURN_CONSISTENCY_CHECK`:
 1. Compare `LIVE_TUTOR_OUTPUT` against `VERIFIED_ANSWER_PACKET` and current proof dossier first.
-2. If every substantive live field is already covered, return `COVERED_BY_DOSSIER` without fresh search.
-3. If any live field introduces a new or drifted substantive claim, run targeted fresh search only for that disputed portion.
+2. Even if every substantive live field appears dossier-covered, run at least one fresh adversarial live search/open cycle targeted at the live-send surface before approving it.
+3. If any live field introduces a new or drifted substantive claim, expand the fresh search to that disputed portion and fail closed if it is not independently supported.
 4. Verify only:
    - `message_to_tutor_now`
    - `next_expected_student_reply`
@@ -206,8 +207,10 @@ QUALITY BAR
 - Directly open controller-provided URLs before accepting the related claim.
 - Substantive answer or method claims normally require 2 independent live sources.
 - Turn verification must target only the 6 `LIVE_TUTOR_OUTPUT` fields.
+- Turn verification is incomplete if no fresh adversarial live retrieval occurred during `TURN_CONSISTENCY_CHECK`.
 - A claim with missing quote text is not supported.
 - A verdict is incomplete if `checked_urls` is empty when URLs or local packets were relied on.
+- A turn-check verdict is incomplete if `checked_urls` contains only local packet paths and no fresh live source.
 - A verdict is incomplete if `supporting_sources` is empty for approved or blocked claims.
 - A verdict about current file content is incomplete if `mismatch_evidence` is empty.
 - Exact question match is preferred first, but direct support for the mathematics and logic is mandatory.
