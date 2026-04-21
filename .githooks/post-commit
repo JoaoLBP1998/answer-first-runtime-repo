@@ -1,0 +1,12 @@
+#!/bin/sh
+
+branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" || exit 0
+
+git remote get-url origin >/dev/null 2>&1 || exit 0
+
+if ! git ls-remote --exit-code origin >/dev/null 2>&1; then
+  echo "post-commit: origin unavailable, skipping auto-push" >&2
+  exit 0
+fi
+
+git push origin "$branch"
