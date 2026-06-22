@@ -1,0 +1,92 @@
+name: audit-benchmark
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install audit tools
+        run: pip install --quiet pytest bandit ruff pip-audit semgrep
+
+      - name: Benchmark inventory
+        run: |
+          {
+            echo "## Repo benchmark"
+            echo "| metric | count |"
+            echo "|---|---|"
+            echo "| Python files | $(find . -name '*.py' -not -path './.git/*' | wc -l | tr -d ' ') |"
+            echo "| Test files (test_*.py) | $(find . -name 'test_*.py' | wc -l | tr -d ' ') |"
+            echo "| JSON files | $(find . -name '*.json' -not -path './.git/*' | wc -l | tr -d ' ') |"
+            echo "| workflow.json present | $(find . -name 'workflow.json' | wc -l | tr -d ' ') |"
+            echo "| Shell scripts | $(find . -name '*.sh' | wc -l | tr -d ' ') |"
+            echo "| PowerShell scripts | $(find . -name '*.ps1' | wc -l | tr -d ' ') |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Tests (pytest discover)
+        run: |
+          set +e
+          pytest -q --continue-on-collection-errors --ignore-glob='*portable-execution-bundle*' 2>&1 | tee pytest.out
+          {
+            echo ""
+            echo "## Tests"
+            echo '```'
+            tail -n 15 pytest.out
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Lint (ruff)
+        run: |
+          set +e
+          ruff check . 2>&1 | tee ruff.out
+          echo "## Lint (ruff): $(wc -l < ruff.out | tr -d ' ') output lines" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Security SAST (bandit)
+        run: |
+          set +e
+          bandit -r . -ll -f txt 2>&1 | tee bandit.out
+          {
+            echo "## Security (bandit)"
+            echo '```'
+            grep -E 'Issue:|Severity:|Total lines|>> Issue' bandit.out | head -40
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Security SAST (semgrep)
+        run: |
+          set +e
+          semgrep scan --config p/python --config p/secrets --metrics=off --quiet 2>&1 | tee semgrep.out || true
+          {
+            echo "## SAST (semgrep)"
+            echo '```'
+            tail -n 20 semgrep.out
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Dependency audit (pip-audit)
+        run: |
+          set +e
+          if ls requirements*.txt >/dev/null 2>&1; then
+            pip-audit -r requirements.txt 2>&1 | tee pipaudit.out
+          else
+            echo "no requirements.txt found" | tee pipaudit.out
+          fi
+          {
+            echo "## Dependency audit (pip-audit)"
+            echo '```'
+            tail -n 12 pipaudit.out
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-reports
+          path: '*.out'
